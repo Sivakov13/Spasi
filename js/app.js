@@ -587,6 +587,9 @@ const App = {
         const profile = this.state.profiles.find(p => p.id === profileId);
         if (!profile) return;
 
+        // Store current profile ID
+        this.currentProfileId = profileId;
+
         // Create modal if it doesn't exist
         let modal = document.getElementById('profileModal');
         if (!modal) {
@@ -819,6 +822,167 @@ const App = {
         });
         
         profilesGrid.appendChild(fragment);
+    },
+
+    // Login functionality
+    login(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        // Simple validation
+        if (email && password) {
+            this.state.currentUser = {
+                id: Date.now(),
+                name: email.split('@')[0],
+                email: email,
+                avatar: email[0].toUpperCase()
+            };
+            
+            this.updateAuthUI();
+            this.closeModal('loginModal');
+            this.showNotification('Вход выполнен успешно!');
+            this.showSection('cabinet');
+        }
+    },
+
+    // Register functionality
+    register(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+        
+        if (password !== passwordConfirm) {
+            this.showNotification('Пароли не совпадают', 'error');
+            return;
+        }
+        
+        if (name && email && password) {
+            this.state.currentUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                avatar: name[0].toUpperCase()
+            };
+            
+            this.updateAuthUI();
+            this.closeModal('registerModal');
+            this.showNotification('Регистрация успешна! Теперь создайте анкету.');
+            this.showSection('create');
+        }
+    },
+
+    // Update auth UI
+    updateAuthUI() {
+        if (this.state.currentUser) {
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('userName').textContent = this.state.currentUser.name;
+            document.getElementById('userAvatar').textContent = this.state.currentUser.avatar;
+        } else {
+            document.getElementById('authButtons').style.display = 'flex';
+            document.getElementById('userInfo').style.display = 'none';
+        }
+    },
+
+    // Logout functionality
+    logout() {
+        this.state.currentUser = null;
+        this.updateAuthUI();
+        this.showNotification('Вы вышли из системы');
+        this.showSection('home');
+        const userMenu = document.getElementById('userMenu');
+        if (userMenu) userMenu.classList.remove('active');
+    },
+
+    // Send message to profile
+    sendMessageToProfile() {
+        if (!this.state.currentUser) {
+            this.closeModal('profileModal');
+            this.showModal('loginModal');
+            return;
+        }
+        
+        this.closeModal('profileModal');
+        this.showSection('messages');
+        this.showNotification('Открыт чат с пользователем');
+    },
+
+    // Add profile to favorites
+    addProfileToFavorites() {
+        if (!this.state.currentUser) {
+            this.closeModal('profileModal');
+            this.showModal('loginModal');
+            return;
+        }
+        
+        if (this.currentProfileId && !this.state.favorites.includes(this.currentProfileId)) {
+            this.state.favorites.push(this.currentProfileId);
+            this.showNotification('Добавлено в избранное');
+        }
+    },
+
+    // Create about section
+    async createAboutSection() {
+        return `
+            <div class="container">
+                <h2 class="section-title">О платформе</h2>
+                
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                        "Спаси и Сохрани" — это православная платформа знакомств для верующих людей, 
+                        которые ищут спутника жизни для создания крепкой семьи, основанной на общих духовных ценностях.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                        <div>
+                            <div style="font-size: 3rem; color: #e91e63; margin-bottom: 1rem;">❤️</div>
+                            <h3>Серьезные отношения</h3>
+                            <p>Только для тех, кто ищет спутника жизни для создания семьи</p>
+                        </div>
+                        <div>
+                            <div style="font-size: 3rem; color: #e91e63; margin-bottom: 1rem;">✝️</div>
+                            <h3>Православные ценности</h3>
+                            <p>Объединяем людей с общими духовными ценностями</p>
+                        </div>
+                        <div>
+                            <div style="font-size: 3rem; color: #e91e63; margin-bottom: 1rem;">🛡️</div>
+                            <h3>Безопасность</h3>
+                            <p>Проверка анкет и защита личных данных</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 3rem;">
+                        <h3>Контакты</h3>
+                        <p>Email: info@spasi-sohrani.ru</p>
+                        <p>Телефон: +7 (495) 123-45-67</p>
+                        <p>Адрес: Москва, ул. Православная, д. 1</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // Create create section
+    async createCreateSection() {
+        return `
+            <div class="container">
+                <h2 class="section-title">Создать анкету</h2>
+                <div class="create-form">
+                    <p style="text-align: center; padding: 2rem; color: #666;">
+                        Функция создания анкеты будет доступна в полной версии приложения.
+                        <br><br>
+                        <button class="btn btn-secondary" onclick="App.showSection('home')">
+                            ← Вернуться на главную
+                        </button>
+                    </p>
+                </div>
+            </div>
+        `;
     }
 };
 

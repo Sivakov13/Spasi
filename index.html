@@ -6,7 +6,6 @@
     <title>Спаси и Сохрани - Православные знакомства</title>
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="css/critical.css" as="style">
     <link rel="preload" href="js/app.js" as="script">
     
     <!-- Critical CSS (above-the-fold) -->
@@ -172,6 +171,16 @@
                 </div>
             </div>
         </div>
+        
+        <!-- User Menu Dropdown -->
+        <div id="userMenu" class="user-menu" style="display: none;">
+            <a href="#cabinet" onclick="App.showSection('cabinet')">👤 Мой кабинет</a>
+            <a href="#messages" onclick="App.showSection('messages')">✉️ Сообщения <span class="badge" id="messagesCount">0</span></a>
+            <a href="#favorites" onclick="App.showSection('favorites')">❤️ Избранное</a>
+            <a href="#settings" onclick="App.showSection('settings')">⚙️ Настройки</a>
+            <hr>
+            <a href="#" onclick="App.logout()">🚪 Выйти</a>
+        </div>
     </header>
 
     <!-- Home Section - Critical content -->
@@ -212,7 +221,93 @@
     <div id="sectionsContainer"></div>
 
     <!-- Modals container -->
-    <div id="modalsContainer"></div>
+    <div id="modalsContainer">
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Вход</h2>
+                    <button class="modal-close" onclick="App.closeModal('loginModal')">&times;</button>
+                </div>
+                
+                <form onsubmit="App.login(event)">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" required id="loginEmail">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" class="form-input" required id="loginPassword">
+                    </div>
+                    
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Запомнить меня
+                    </label>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        👤 Войти
+                    </button>
+                    
+                    <p style="text-align: center; margin-top: 1rem;">
+                        <a href="#" style="color: #e91e63;">Забыли пароль?</a>
+                    </p>
+                    
+                    <hr style="margin: 1.5rem 0;">
+                    
+                    <p style="text-align: center;">
+                        Нет аккаунта? <a href="#" onclick="App.closeModal('loginModal'); App.showModal('registerModal')" style="color: #e91e63;">Зарегистрируйтесь</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Register Modal -->
+        <div id="registerModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Регистрация</h2>
+                    <button class="modal-close" onclick="App.closeModal('registerModal')">&times;</button>
+                </div>
+                
+                <form onsubmit="App.register(event)">
+                    <div class="form-group">
+                        <label class="form-label">Имя</label>
+                        <input type="text" class="form-input" required id="registerName">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" required id="registerEmail">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" class="form-input" required id="registerPassword">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Подтвердите пароль</label>
+                        <input type="password" class="form-input" required id="registerPasswordConfirm">
+                    </div>
+                    
+                    <label class="checkbox-label">
+                        <input type="checkbox" required> Я согласен с правилами платформы
+                    </label>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        ➕ Зарегистрироваться
+                    </button>
+                    
+                    <hr style="margin: 1.5rem 0;">
+                    
+                    <p style="text-align: center;">
+                        Есть аккаунт? <a href="#" onclick="App.closeModal('registerModal'); App.showModal('loginModal')" style="color: #e91e63;">Войдите</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Notification -->
     <div id="notification" class="notification" style="display: none;"></div>
@@ -228,6 +323,8 @@
         }
     </script>
 
+    <!-- Load performance monitor first -->
+    <script src="js/performance-monitor.js"></script>
     <!-- Load main app script -->
     <script src="js/app.js" defer></script>
 </body>
