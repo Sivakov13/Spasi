@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спаси и Сохрани - Православные знакомства</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Georgia, serif; background: #f8f9fa; color: #2c3e50; line-height: 1.6; overflow-x: hidden; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+        /* Enhanced Header */
+        .header { background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-bottom: 3px solid #d4af37; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.1); backdrop-filter: blur(10px); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; position: relative; }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 1.8rem; font-weight: 700; color: #8b4513; cursor: pointer; transition: all 0.3s ease; }
+        .logo:hover { transform: scale(1.05); }
+        .logo i { color: #d4af37; font-size: 2rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        .nav { display: flex; gap: 0.5rem; list-style: none; background: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 50px; backdrop-filter: blur(10px); }
+        .nav a { text-decoration: none; color: #2c3e50; font-weight: 500; transition: all 0.3s ease; cursor: pointer; padding: 0.8rem 1.2rem; border-radius: 25px; position: relative; }
+        .nav a:hover, .nav a.active { color: #8b4513; background: rgba(212, 175, 55, 0.1); transform: translateY(-2px); }
+        .nav a.active::after { content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); width: 20px; height: 3px; background: #d4af37; border-radius: 2px; }
+
+        /* Enhanced User Interface */
+        .auth-buttons { display: flex; gap: 0.8rem; align-items: center; }
+        .user-info { display: none; align-items: center; gap: 1rem; position: relative; }
+        .user-avatar { width: 45px; height: 45px; background: linear-gradient(135deg, #8b4513, #d4af37); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 3px solid #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; position: relative; }
+        .user-avatar:hover { transform: scale(1.1); }
+        .user-avatar::after { content: ''; position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; background: #27ae60; border-radius: 50%; border: 2px solid white; }
+        
+        .user-menu { position: absolute; top: 70px; right: 0; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); padding: 1.5rem; display: none; min-width: 250px; z-index: 1001; border: 1px solid #e9ecef; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .user-menu.active { display: block; }
+        .user-menu a { display: flex; align-items: center; gap: 1rem; padding: 1rem; color: #2c3e50; text-decoration: none; transition: all 0.3s ease; border-radius: 10px; margin-bottom: 0.5rem; }
+        .user-menu a:hover { background: linear-gradient(135deg, #f8f9fa, #e9ecef); transform: translateX(5px); }
+        .user-menu hr { margin: 1rem 0; border: none; height: 1px; background: #e9ecef; }
+
+        /* Enhanced Buttons */
+        .btn { padding: 0.8rem 2rem; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 0.6rem; font-size: 14px; font-family: inherit; position: relative; overflow: hidden; }
+        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
+        .btn:hover::before { left: 100%; }
+        .btn-primary { background: linear-gradient(135deg, #8b4513, #a0522d); color: white; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4); }
+        .btn-secondary { background: linear-gradient(135deg, #ffffff, #f8f9fa); color: #8b4513; border: 2px solid #8b4513; }
+        .btn-secondary:hover { background: linear-gradient(135deg, #8b4513, #a0522d); color: white; transform: translateY(-2px); }
+        .btn-large { padding: 1.2rem 3rem; font-size: 1.1rem; border-radius: 30px; }
+        .btn-small { padding: 0.6rem 1.2rem; font-size: 0.85rem; border-radius: 20px; }
+
+        /* Enhanced Hero Section */
+        .hero { background: linear-gradient(135deg, #f8f4e6 0%, #f0e6d2 50%, #e8dcc0 100%); color: #2c3e50; padding: 6rem 0; text-align: center; border-bottom: 3px solid #d4af37; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23d4af37" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23d4af37" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23d4af37" opacity="0.15"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat; }
+        .hero-content { position: relative; z-index: 2; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1.5rem; color: #8b4513; font-weight: 300; letter-spacing: -1px; animation: fadeInUp 1s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .hero p { font-size: 1.3rem; margin-bottom: 3rem; opacity: 0.9; max-width: 700px; margin-left: auto; margin-right: auto; animation: fadeInUp 1s ease 0.2s both; }
+        .hero-buttons { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 4rem; animation: fadeInUp 1s ease 0.4s both; }
+        
+        /* Enhanced Stats */
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 4rem; }
+        .stat-card { background: rgba(255,255,255,0.9); padding: 2.5rem; border-radius: 20px; text-align: center; transition: all 0.4s ease; border: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(10px); position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #8b4513, #d4af37); }
+        .stat-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .stat-number { font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; color: #8b4513; background: linear-gradient(135deg, #8b4513, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Enhanced Sections */
+        .section { padding: 4rem 0; display: none; min-height: 70vh; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .section.active { display: block; }
+        .section-title { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; color: #8b4513; font-weight: 300; position: relative; }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: linear-gradient(90deg, #8b4513, #d4af37); border-radius: 2px; }
+
+        /* Advanced Search & Filters */
+        .search-container { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 3rem; }
+        .search-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #f1f3f4; }
+        .search-tab { padding: 1rem 2rem; cursor: pointer; border-radius: 10px 10px 0 0; transition: all 0.3s ease; font-weight: 500; }
+        .search-tab.active { background: #8b4513; color: white; }
+        .search-tab:not(.active):hover { background: #f8f9fa; }
+        
+        .search-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .filter-group { position: relative; }
+        .filter-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2c3e50; }
+        .filter-input { width: 100%; padding: 1rem; border: 2px solid #e9ecef; border-radius: 10px; font-size: 1rem; transition: all 0.3s ease; background: #f8f9fa; }
+        .filter-input:focus { outline: none; border-color: #8b4513; background: white; box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1); }
+
+        .search-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .results-info { display: flex; justify-content: space-between; align-items: center; margin: 2rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px; }
+        .sort-options { display: flex; gap: 1rem; align-items: center; }
+        .sort-select { padding: 0.5rem 1rem; border: 1px solid #e9ecef; border-radius: 8px; background: white; }
+
+        /* Enhanced Profile Cards */
+        .profiles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .profile-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: all 0.4s ease; cursor: pointer; border: 2px solid transparent; position: relative; }
+        .profile-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); border-color: #d4af37; }
+        .profile-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #8b4513, #d4af37); opacity: 0; transition: opacity 0.3s; }
+        .profile-card:hover::before { opacity: 1; }
+
+        .profile-photo { width: 100%; height: 250px; background: linear-gradient(135deg, #d4af37, #f4e4a6); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; position: relative; font-family: Georgia, serif; }
+        .profile-status { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.8); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; backdrop-filter: blur(5px); }
+        .profile-status.online { background: rgba(39, 174, 96, 0.9); }
+        .compatibility-badge { position: absolute; top: 15px; left: 15px; background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+        .profile-content { padding: 2rem; }
+        .profile-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
+        .profile-name { font-size: 1.4rem; font-weight: 600; color: #8b4513; }
+        .profile-age { color: #666; font-size: 1.1rem; }
+        .profile-verified { color: #27ae60; margin-left: 0.5rem; }
+        .profile-location { color: #666; font-size: 0.95rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .profile-quote { font-style: italic; color: #555; margin-bottom: 1.5rem; padding: 1.2rem; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 12px; border-left: 4px solid #d4af37; position: relative; }
+        .profile-quote::before { content: '"'; position: absolute; top: -10px; left: 15px; font-size: 2rem; color: #d4af37; }
+
+        .profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .profile-stat { text-align: center; padding: 0.8rem; background: #f8f9fa; border-radius: 10px; }
+        .profile-stat-number { font-weight: 600; color: #8b4513; display: block; }
+        .profile-stat-label { font-size: 0.8rem; color: #666; }
+
+        .profile-interests { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.5rem; }
+        .interest-tag { background: linear-gradient(135deg, #8b4513, #a0522d); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s ease; }
+        .interest-tag:hover { transform: scale(1.05); }
+
+        .profile-actions { display: flex; gap: 0.8rem; justify-content: space-between; margin-bottom: 1rem; }
+        .profile-actions-main { display: flex; gap: 0.8rem; flex: 1; }
+        .profile-actions-secondary { display: flex; gap: 0.5rem; }
+
+        .quick-actions { display: flex; gap: 0.5rem; }
+        .quick-action { width: 40px; height: 40px; border: none; border-radius: 50%; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+        .quick-action:hover { transform: scale(1.1); }
+        .quick-action.favorite { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+        .quick-action.gift { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+        .quick-action.wink { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; }
+
+        /* Enhanced Modal System */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; backdrop-filter: blur(5px); }
+        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 0; border-radius: 20px; width: 90%; max-width: 800px; max-height: 90vh; overflow: hidden; border: 1px solid #e9ecef; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalSlideIn 0.3s ease; }
+        @keyframes modalSlideIn { from { opacity: 0; transform: translate(-50%, -60%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+        
+        .modal-header { padding: 2rem; border-bottom: 2px solid #f1f3f4; background: linear-gradient(135deg, #f8f9fa, #ffffff); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { color: #8b4513; font-weight: 600; }
+        .modal-close { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #666; transition: all 0.3s ease; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { color: #8b4513; background: #f8f9fa; }
+        .modal-body { padding: 2rem; max-height: 60vh; overflow-y: auto; }
+
+        /* Enhanced Forms */
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { margin-bottom: 0.8rem; font-weight: 500; color: #2c3e50; display: block; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 1rem; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease; font-family: inherit; background: #f8f9fa; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: #8b4513; background: white; box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1); }
+        .form-textarea { resize: vertical; min-height: 120px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 1rem; }
+        .checkbox-label { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.8rem; border-radius: 10px; transition: all 0.3s ease; }
+        .checkbox-label:hover { background: #f8f9fa; }
+        .checkbox-input { width: 18px; height: 18px; }
+
+        /* Enhanced Notification System */
+        .notification { position: fixed; top: 30px; right: 30px; background: white; color: #2c3e50; padding: 1.2rem 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 3000; border-left: 4px solid #27ae60; min-width: 300px; animation: notificationSlide 0.4s ease; }
+        @keyframes notificationSlide { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+        .notification.success { border-left-color: #27ae60; }
+        .notification.error { border-left-color: #e74c3c; }
+        .notification.warning { border-left-color: #f39c12; }
+        .notification.info { border-left-color: #3498db; }
+        .notification-icon { display: inline-block; margin-right: 0.8rem; font-size: 1.2rem; }
+        .notification-close { float: right; cursor: pointer; opacity: 0.7; font-size: 1.1rem; }
+        .notification-close:hover { opacity: 1; }
+
+        /* Enhanced Chat Interface */
+        .chat-container { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); height: 600px; display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header { padding: 1.5rem; border-bottom: 2px solid #f1f3f4; background: linear-gradient(135deg, #f8f9fa, #ffffff); display: flex; justify-content: space-between; align-items: center; }
+        .chat-user-info { display: flex; align-items: center; gap: 1rem; }
+        .chat-avatar { width: 45px; height: 45px; background: linear-gradient(135deg, #8b4513, #d4af37); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+        .chat-status { display: flex; align-items: center; gap: 0.5rem; color: #27ae60; font-size: 0.9rem; }
+        .chat-actions { display: flex; gap: 0.5rem; }
+        .chat-action-btn { width: 35px; height: 35px; border: none; border-radius: 50%; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: #666; }
+        .chat-action-btn:hover { background: #8b4513; color: white; }
+
+        .chat-messages { flex: 1; padding: 1.5rem; overflow-y: auto; background: linear-gradient(135deg, #fafbfc, #f8f9fa); }
+        .chat-message { margin-bottom: 1.5rem; animation: messageAppear 0.3s ease; }
+        @keyframes messageAppear { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message-sent { text-align: right; }
+        .message-received { text-align: left; }
+        .message-bubble { display: inline-block; padding: 1rem 1.5rem; border-radius: 20px; max-width: 75%; word-wrap: break-word; position: relative; }
+        .message-sent .message-bubble { background: linear-gradient(135deg, #8b4513, #a0522d); color: white; border-bottom-right-radius: 5px; }
+        .message-received .message-bubble { background: white; color: #333; border: 1px solid #e9ecef; border-bottom-left-radius: 5px; }
+        .message-time { font-size: 0.75rem; color: #999; margin-top: 0.5rem; }
+        .message-status { font-size: 0.7rem; color: #999; margin-top: 0.3rem; }
+
+        .chat-input-container { padding: 1.5rem; border-top: 2px solid #f1f3f4; background: white; }
+        .chat-input { display: flex; gap: 1rem; align-items: end; }
+        .chat-input input { flex: 1; padding: 1rem 1.5rem; border: 2px solid #e9ecef; border-radius: 25px; font-size: 1rem; background: #f8f9fa; transition: all 0.3s ease; }
+        .chat-input input:focus { outline: none; border-color: #8b4513; background: white; }
+        .chat-send-btn { width: 50px; height: 50px; border: none; border-radius: 50%; background: linear-gradient(135deg, #8b4513, #a0522d); color: white; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+        .chat-send-btn:hover { transform: scale(1.1); }
+        .chat-extra-actions { display: flex; gap: 0.5rem; }
+        .chat-extra-btn { width: 40px; height: 40px; border: none; border-radius: 50%; background: #f8f9fa; color: #666; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+        .chat-extra-btn:hover { background: #e9ecef; }
+
+        /* New Sections */
+        .compatibility-section { background: white; padding: 2rem; border-radius: 20px; margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .compatibility-meter { background: #f8f9fa; border-radius: 10px; height: 20px; overflow: hidden; margin: 1rem 0; }
+        .compatibility-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #f39c12, #27ae60); transition: width 0.8s ease; }
+        .compatibility-factors { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .compatibility-factor { padding: 1rem; background: #f8f9fa; border-radius: 10px; text-align: center; }
+
+        .gifts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+        .gift-card { background: white; padding: 1.5rem; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer; }
+        .gift-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .gift-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .gift-price { font-weight: 600; color: #8b4513; font-size: 1.2rem; }
+
+        .calendar-container { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .calendar-nav { display: flex; gap: 1rem; }
+        .calendar-nav-btn { width: 40px; height: 40px; border: none; border-radius: 50%; background: #8b4513; color: white; cursor: pointer; transition: all 0.3s ease; }
+        .calendar-nav-btn:hover { background: #a0522d; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: #e9ecef; border-radius: 10px; overflow: hidden; }
+        .calendar-day { background: white; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s ease; min-height: 60px; }
+        .calendar-day:hover { background: #f8f9fa; }
+        .calendar-day.has-event { background: linear-gradient(135deg, #8b4513, #a0522d); color: white; }
+        .calendar-day.today { background: #d4af37; color: white; font-weight: 600; }
+
+        /* Enhanced Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container { padding: 0 15px; }
+            .header-content { flex-direction: column; gap: 1rem; padding: 1rem 0; }
+            .nav { flex-wrap: wrap; justify-content: center; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .stats { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            .profiles-grid { grid-template-columns: 1fr; }
+            .search-filters { grid-template-columns: 1fr; }
+            .modal-content { width: 95%; max-height: 95vh; }
+            .chat-container { height: 70vh; }
+            .profile-stats { grid-template-columns: repeat(2, 1fr); }
+            .user-menu { right: 10px; min-width: 200px; }
+        }
+
+        /* Loading States */
+        .loading { position: relative; }
+        .loading::after { content: ''; position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border: 2px solid #f3f3f3; border-top: 2px solid #8b4513; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Tooltip System */
+        .tooltip { position: relative; }
+        .tooltip::after { content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 1000; }
+        .tooltip:hover::after { opacity: 1; }
+
+        /* Floating Action Button */
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, #8b4513, #a0522d); color: white; border: none; border-radius: 50%; cursor: pointer; box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3); transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .fab:hover { transform: scale(1.1); box-shadow: 0 12px 35px rgba(139, 69, 19, 0.4); }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="showSection('home')">
+                    <i class="fas fa-cross"></i>
+                    <span>Спаси и Сохрани</span>
+                </div>
+                
+                <nav class="nav" id="nav">
+                    <a href="javascript:void(0)" class="active" onclick="showSection('home')">
+                        <i class="fas fa-home"></i> Главная
+                    </a>
+                    <a href="javascript:void(0)" onclick="showSection('profiles')">
+                        <i class="fas fa-users"></i> Анкеты
+                    </a>
+                    <a href="javascript:void(0)" onclick="showSection('compatibility')">
+                        <i class="fas fa-heart"></i> Совместимость
+                    </a>
+                    <a href="javascript:void(0)" onclick="showSection('gifts')">
+                        <i class="fas fa-gift"></i> Подарки
+                    </a>
+                    <a href="javascript:void(0)" onclick="showSection('calendar')">
+                        <i class="fas fa-calendar"></i> События
+                    </a>
+                    <a href="javascript:void(0)" onclick="showSection('blog')">
+                        <i class="fas fa-book-open"></i> Блог
+                    </a>
+                </nav>
+                
+                <div class="auth-buttons">
+                    <div id="authButtons">
+                        <button class="btn btn-secondary" onclick="showModal('loginModal')">
+                            <i class="fas fa-sign-in-alt"></i> Войти
+                        </button>
+                        <button class="btn btn-primary" onclick="showModal('registerModal')">
+                            <i class="fas fa-user-plus"></i> Регистрация
+                        </button>
+                    </div>
+                    
+                    <div id="userInfo" class="user-info">
+                        <div class="user-notifications tooltip" data-tooltip="Уведомления">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge" id="notificationCount">0</span>
+                        </div>
+                        <span id="userName">Имя</span>
+                        <div class="user-avatar" id="userAvatar" onclick="toggleUserMenu()">И</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="userMenu" class="user-menu">
+            <div style="text-align: center; padding-bottom: 1rem; border-bottom: 1px solid #e9ecef; margin-bottom: 1rem;">
+                <div class="user-avatar" style="margin: 0 auto 0.5rem;">И</div>
+                <div style="font-weight: 600; color: #8b4513;">Иван Петров</div>
+                <div style="font-size: 0.9rem; color: #666;">Premium аккаунт</div>
+            </div>
+            <a href="javascript:void(0)" onclick="showSection('cabinet')">
+                <i class="fas fa-user"></i> Мой кабинет
+            </a>
+            <a href="javascript:void(0)" onclick="showSection('messages')">
+                <i class="fas fa-envelope"></i> Сообщения 
+                <span class="badge" id="messagesCount">0</span>
+            </a>
+            <a href="javascript:void(0)" onclick="showSection('favorites')">
+                <i class="fas fa-heart"></i> Избранное
+                <span class="badge" id="favoritesCountMenu">0</span>
+            </a>
+            <a href="javascript:void(0)" onclick="showSection('matches')">
+                <i class="fas fa-magic"></i> Мои совпадения
+            </a>
+            <a href="javascript:void(0)" onclick="showSection('visitors')">
+                <i class="fas fa-eye"></i> Кто смотрел профиль
+            </a>
+            <a href="javascript:void(0)" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i> Настройки
+            </a>
+            <hr>
+            <a href="javascript:void(0)" onclick="showPremiumModal()">
+                <i class="fas fa-crown"></i> Premium подписка
+            </a>
+            <a href="javascript:void(0)" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Выйти
+            </a>
+        </div>
+    </header>
+
+    <!-- Enhanced Hero Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Найдите свою вторую половинку в вере</h1>
+                    <p>Современная православная платформа знакомств с умным алгоритмом совместимости для создания крепких семей, основанных на духовных ценностях</p>
+                    
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-large" onclick="handleCreateProfile()">
+                            <i class="fas fa-user-plus"></i> Создать анкету бесплатно
+                        </button>
+                        <button class="btn btn-secondary btn-large" onclick="showSection('profiles')">
+                            <i class="fas fa-search"></i> Найти пару сейчас
+                        </button>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-number">2,847</div>
+                            <div>Активных пользователей</div>
+                            <small style="color: #27ae60;">↑ +12% за месяц</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">456</div>
+                            <div>Счастливых пар</div>
+                            <small style="color: #27ae60;">↑ +8 за неделю</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">189</div>
+                            <div>Венчаний</div>
+                            <small style="color: #27ae60;">↑ +3 в этом месяце</small>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">98%</div>
+                            <div>Довольных пользователей</div>
+                            <small style="color: #27ae60;">Высший рейтинг</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Profiles Section -->
+    <section id="profiles" class="section">
+        <div class="container">
+            <h2 class="section-title">Поиск анкет</h2>
+            
+            <!-- Advanced Search Container -->
+            <div class="search-container">
+                <div class="search-tabs">
+                    <div class="search-tab active" onclick="switchSearchTab('basic')">
+                        <i class="fas fa-search"></i> Быстрый поиск
+                    </div>
+                    <div class="search-tab" onclick="switchSearchTab('advanced')">
+                        <i class="fas fa-sliders-h"></i> Расширенный поиск
+                    </div>
+                    <div class="search-tab" onclick="switchSearchTab('compatibility')">
+                        <i class="fas fa-heart"></i> По совместимости
+                    </div>
+                </div>
+
+                <div id="basicSearch" class="search-content active">
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Я ищу</label>
+                            <select class="filter-input" id="quickGender">
+                                <option value="">Любой пол</option>
+                                <option value="male">Мужчину</option>
+                                <option value="female">Женщину</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Возраст от</label>
+                            <input type="number" class="filter-input" id="quickAgeFrom" min="18" max="80" placeholder="18">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Возраст до</label>
+                            <input type="number" class="filter-input" id="quickAgeTo" min="18" max="80" placeholder="50">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Город</label>
+                            <input type="text" class="filter-input" id="quickCity" placeholder="Введите город">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Онлайн статус</label>
+                            <select class="filter-input" id="quickOnline">
+                                <option value="">Любой</option>
+                                <option value="online">Только онлайн</option>
+                                <option value="recent">Недавно в сети</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="advancedSearch" class="search-content">
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Воцерковленность</label>
+                            <select class="filter-input" id="advancedChurch">
+                                <option value="">Любая</option>
+                                <option value="воцерковленный">Воцерковленный</option>
+                                <option value="неофит">Неофит</option>
+                                <option value="ищущий">Ищущий</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Семейное положение</label>
+                            <select class="filter-input" id="advancedMarital">
+                                <option value="">Любое</option>
+                                <option value="холост">Холост/Не замужем</option>
+                                <option value="разведен">Разведен(а)</option>
+                                <option value="вдовец">Вдовец/Вдова</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Образование</label>
+                            <select class="filter-input" id="advancedEducation">
+                                <option value="">Любое</option>
+                                <option value="среднее">Среднее</option>
+                                <option value="высшее">Высшее</option>
+                                <option value="богословское">Богословское</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Дети</label>
+                            <select class="filter-input" id="advancedChildren">
+                                <option value="">Не важно</option>
+                                <option value="нет">Нет детей</option>
+                                <option value="есть">Есть дети</option>
+                                <option value="хочет">Хочет детей</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Курение</label>
+                            <select class="filter-input" id="advancedSmoking">
+                                <option value="">Не важно</option>
+                                <option value="не курит">Не курит</option>
+                                <option value="курит">Курит</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Алкоголь</label>
+                            <select class="filter-input" id="advancedAlcohol">
+                                <option value="">Не важно</option>
+                                <option value="не пьет">Не употребляет</option>
+                                <option value="умеренно">Умеренно</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="compatibilitySearch" class="search-content">
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Совместимость от</label>
+                            <input type="range" class="filter-input" id="compatibilityMin" min="0" max="100" value="70">
+                            <span id="compatibilityMinValue">70%</span>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Приоритет: Духовность</label>
+                            <input type="range" class="filter-input" id="spiritualityWeight" min="1" max="5" value="5">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Приоритет: Интересы</label>
+                            <input type="range" class="filter-input" id="interestsWeight" min="1" max="5" value="3">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Приоритет: Образ жизни</label>
+                            <input type="range" class="filter-input" id="lifestyleWeight" min="1" max="5" value="4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-actions">
+                    <button class="btn btn-primary btn-large" onclick="performAdvancedSearch()">
+                        <i class="fas fa-search"></i> Найти совпадения
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearFilters()">
+                        <i class="fas fa-eraser"></i> Очистить фильтры
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveSearchFilters()">
+                        <i class="fas fa-save"></i> Сохранить поиск
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Info -->
+            <div class="results-info" id="resultsInfo" style="display: none;">
+                <div>
+                    <span id="resultsCount">0</span> анкет найдено
+                    <span id="searchTime"></span>
+                </div>
+                <div class="sort-options">
+                    <label>Сортировка:</label>
+                    <select class="sort-select" id="sortBy" onchange="sortProfiles()">
+                        <option value="relevance">По релевантности</option>
+                        <option value="activity">По активности</option>
+                        <option value="age">По возрасту</option>
+                        <option value="compatibility">По совместимости</option>
+                        <option value="distance">По расстоянию</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Profiles Grid -->
+            <div class="profiles-grid" id="profilesGrid"></div>
+            
+            <div style="text-align: center; margin-top: 3rem;" id="loadMoreContainer">
+                <button class="btn btn-primary btn-large" onclick="loadMoreProfiles()">
+                    <i class="fas fa-plus"></i> Показать ещё анкеты
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compatibility Section -->
+    <section id="compatibility" class="section">
+        <div class="container">
+            <h2 class="section-title">Система совместимости</h2>
+            
+            <div class="compatibility-section">
+                <h3 style="color: #8b4513; margin-bottom: 2rem;">Ваши лучшие совпадения</h3>
+                <div id="compatibilityMatches"></div>
+            </div>
+
+            <div class="compatibility-section">
+                <h3 style="color: #8b4513; margin-bottom: 2rem;">Как работает совместимость</h3>
+                <div class="compatibility-factors">
+                    <div class="compatibility-factor">
+                        <i class="fas fa-cross" style="color: #8b4513; font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4>Духовность</h4>
+                        <p>Уровень воцерковленности, участие в церковной жизни</p>
+                    </div>
+                    <div class="compatibility-factor">
+                        <i class="fas fa-heart" style="color: #e74c3c; font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4>Ценности</h4>
+                        <p>Отношение к семье, браку, детям</p>
+                    </div>
+                    <div class="compatibility-factor">
+                        <i class="fas fa-users" style="color: #3498db; font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4>Интересы</h4>
+                        <p>Общие увлечения и хобби</p>
+                    </div>
+                    <div class="compatibility-factor">
+                        <i class="fas fa-home" style="color: #27ae60; font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4>Образ жизни</h4>
+                        <p>Привычки, режим, отношение к здоровью</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gifts Section -->
+    <section id="gifts" class="section">
+        <div class="container">
+            <h2 class="section-title">Виртуальные подарки</h2>
+            <p style="text-align: center; margin-bottom: 3rem; color: #666; font-size: 1.1rem;">
+                Выразите свои чувства с помощью символических подарков
+            </p>
+            
+            <div class="gifts-grid">
+                <div class="gift-card" onclick="selectGift('rose')">
+                    <div class="gift-icon">🌹</div>
+                    <h4>Роза</h4>
+                    <p>Классический знак внимания</p>
+                    <div class="gift-price">50 ₽</div>
+                </div>
+                <div class="gift-card" onclick="selectGift('candle')">
+                    <div class="gift-icon">🕯️</div>
+                    <h4>Свеча</h4>
+                    <p>Символ молитвы и духовности</p>
+                    <div class="gift-price">75 ₽</div>
+                </div>
+                <div class="gift-card" onclick="selectGift('icon')">
+                    <div class="gift-icon">🖼️</div>
+                    <h4>Икона</h4>
+                    <p>Духовный подарок</p>
+                    <div class="gift-price">150 ₽</div>
+                </div>
+                <div class="gift-card" onclick="selectGift('book')">
+                    <div class="gift-icon">📖</div>
+                    <h4>Духовная книга</h4>
+                    <p>Подарок для души</p>
+                    <div class="gift-price">200 ₽</div>
+                </div>
+                <div class="gift-card" onclick="selectGift('cross')">
+                    <div class="gift-icon">✝️</div>
+                    <h4>Крестик</h4>
+                    <p>Оберег и символ веры</p>
+                    <div class="gift-price">300 ₽</div>
+                </div>
+                <div class="gift-card" onclick="selectGift('ring')">
+                    <div class="gift-icon">💍</div>
+                    <h4>Кольцо</h4>
+                    <p>Серьёзные намерения</p>
+                    <div class="gift-price">500 ₽</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calendar Section -->
+    <section id="calendar" class="section">
+        <div class="container">
+            <h2 class="section-title">Календарь православных событий</h2>
+            
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h3 id="calendarMonth">Март 2024</h3>
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn" onclick="previousMonth()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="calendar-nav-btn" onclick="nextMonth()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated here -->
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="compatibility-section">
+                    <h4 style="color: #8b4513; margin-bottom: 1rem;">Ближайшие события</h4>
+                    <div id="upcomingEvents"></div>
+                </div>
+                <div class="compatibility-section">
+                    <h4 style="color: #8b4513; margin-bottom: 1rem;">Православные праздники</h4>
+                    <div id="orthodoxHolidays"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Blog Section -->
+    <section id="blog" class="section">
+        <div class="container">
+            <h2 class="section-title">Православный блог</h2>
+            <div id="blogGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <!-- Blog posts will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- All other sections will continue with enhanced styling... -->
+    <!-- ... existing code ... -->
+</body>
+</html>
