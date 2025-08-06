@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Спаси и Сохрани - православная платформа знакомств для создания крепкой семьи">
+    <title>Спаси и Сохрани - Православные знакомства</title>
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Critical CSS inline -->
+    <style>
+        /* Critical CSS for above-the-fold content */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Critical Styles */
+        .header {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e91e63;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #e91e63;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #e91e63;
+            border: 2px solid #e91e63;
+        }
+
+        /* Hero Section Critical */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading indicator */
+        .loading-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+        }
+
+        .loading-indicator.active {
+            display: block;
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    
+    <!-- Defer non-critical CSS -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+</head>
+<body>
+    <!-- Loading indicator -->
+    <div class="loading-indicator active">
+        <div style="border: 3px solid #f3f3f3; border-top: 3px solid #e91e63; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="showSection('home')">
+                    <i class="fas fa-heart"></i>
+                    Спаси и Сохрани
+                </div>
+                
+                <nav class="nav" id="nav">
+                    <a href="#home" class="active" onclick="showSection('home')">Главная</a>
+                    <a href="#profiles" onclick="showSection('profiles')">Анкеты</a>
+                    <a href="#search" onclick="showSection('search')">Поиск</a>
+                    <a href="#create" onclick="handleCreateProfile()">Создать анкету</a>
+                    <a href="#about" onclick="showSection('about')">О нас</a>
+                </nav>
+                
+                <div class="auth-buttons">
+                    <div id="authButtons">
+                        <button class="btn btn-secondary" onclick="showModal('loginModal')">Войти</button>
+                        <button class="btn btn-primary" onclick="showModal('registerModal')">Регистрация</button>
+                    </div>
+                    
+                    <div id="userInfo" class="user-info" style="display: none;">
+                        <span id="userName">Имя</span>
+                        <div class="user-avatar" id="userAvatar" onclick="toggleUserMenu()">И</div>
+                    </div>
+                    
+                    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Menu Dropdown -->
+        <div id="userMenu" class="user-menu"></div>
+    </header>
+
+    <!-- Main content container -->
+    <main id="mainContent">
+        <!-- Home Section (initially visible) -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <div class="container">
+                    <h1>Найдите свою вторую половинку в вере</h1>
+                    <p>Православная платформа знакомств для создания крепкой семьи</p>
+                    
+                    <div class="hero-buttons">
+                        <button class="btn btn-secondary btn-large" onclick="handleCreateProfile()">
+                            <i class="fas fa-user-plus"></i> Создать анкету
+                        </button>
+                        <button class="btn btn-primary btn-large" onclick="showSection('profiles')">
+                            <i class="fas fa-search"></i> Смотреть анкеты
+                        </button>
+                    </div>
+                    
+                    <div class="stats" id="statsContainer">
+                        <!-- Stats will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quick-actions">
+                <div class="container">
+                    <h2 class="section-title">Как это работает?</h2>
+                    <div class="actions-grid" id="actionsGrid">
+                        <!-- Actions will be loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other sections will be loaded dynamically -->
+        <div id="dynamicSections"></div>
+    </main>
+
+    <!-- Modals container -->
+    <div id="modalsContainer"></div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Deferred styles -->
+    <link rel="stylesheet" href="/workspace/css/main.css" media="print" onload="this.media='all'">
+    
+    <!-- Optimized JavaScript -->
+    <script>
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', function() {
+                const perfData = window.performance.timing;
+                const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+                console.log('Page load time:', pageLoadTime + 'ms');
+            });
+        }
+
+        // Critical functionality
+        window.appState = {
+            currentUser: null,
+            sections: {},
+            profiles: [],
+            favorites: []
+        };
+
+        // Lazy load sections
+        const sectionLoaders = {
+            profiles: () => import('/workspace/js/sections/profiles.js'),
+            search: () => import('/workspace/js/sections/search.js'),
+            create: () => import('/workspace/js/sections/create.js'),
+            cabinet: () => import('/workspace/js/sections/cabinet.js'),
+            messages: () => import('/workspace/js/sections/messages.js'),
+            about: () => import('/workspace/js/sections/about.js')
+        };
+
+        async function showSection(sectionId) {
+            try {
+                // Show loading indicator
+                document.querySelector('.loading-indicator').classList.add('active');
+
+                // Load section if not already loaded
+                if (!window.appState.sections[sectionId] && sectionLoaders[sectionId]) {
+                    const module = await sectionLoaders[sectionId]();
+                    window.appState.sections[sectionId] = module.default;
+                }
+
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // Show selected section
+                let section = document.getElementById(sectionId);
+                if (!section && window.appState.sections[sectionId]) {
+                    section = await window.appState.sections[sectionId].render();
+                    document.getElementById('dynamicSections').appendChild(section);
+                }
+
+                if (section) {
+                    section.classList.add('active');
+                    
+                    // Update navigation
+                    document.querySelectorAll('.nav a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + sectionId) {
+                            link.classList.add('active');
+                        }
+                    });
+
+                    // Initialize section if needed
+                    if (window.appState.sections[sectionId] && window.appState.sections[sectionId].init) {
+                        window.appState.sections[sectionId].init();
+                    }
+                }
+
+                // Hide loading indicator
+                document.querySelector('.loading-indicator').classList.remove('active');
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+            } catch (error) {
+                console.error('Error loading section:', error);
+                document.querySelector('.loading-indicator').classList.remove('active');
+            }
+        }
+
+        // Defer loading of non-critical resources
+        function loadDeferredResources() {
+            // Load Font Awesome icons
+            const fontAwesome = document.querySelector('link[href*="font-awesome"]');
+            if (fontAwesome) {
+                fontAwesome.rel = 'stylesheet';
+            }
+
+            // Load stats
+            loadStats();
+
+            // Load quick actions
+            loadQuickActions();
+
+            // Initialize service worker for caching
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/workspace/sw.js').catch(err => console.log('SW registration failed'));
+            }
+        }
+
+        function loadStats() {
+            const statsContainer = document.getElementById('statsContainer');
+            if (statsContainer) {
+                statsContainer.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">1,234</div>
+                        <div>Активных анкет</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">156</div>
+                        <div>Счастливых пар</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">89</div>
+                        <div>Венчаний</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24/7</div>
+                        <div>Поддержка</div>
+                    </div>
+                `;
+            }
+        }
+
+        function loadQuickActions() {
+            const actionsGrid = document.getElementById('actionsGrid');
+            if (actionsGrid) {
+                actionsGrid.innerHTML = `
+                    <div class="action-card" onclick="showModal('registerModal')">
+                        <div class="action-icon"><i class="fas fa-user-plus"></i></div>
+                        <h3>Регистрация</h3>
+                        <p>Создайте аккаунт и заполните анкету</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('search')">
+                        <div class="action-icon"><i class="fas fa-search"></i></div>
+                        <h3>Поиск</h3>
+                        <p>Найдите подходящего человека</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('profiles')">
+                        <div class="action-icon"><i class="fas fa-comments"></i></div>
+                        <h3>Общение</h3>
+                        <p>Начните общаться и узнавать друг друга</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('about')">
+                        <div class="action-icon"><i class="fas fa-heart"></i></div>
+                        <h3>Встреча</h3>
+                        <p>Встретьтесь и создайте семью</p>
+                    </div>
+                `;
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('nav').classList.toggle('active');
+        }
+
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('active');
+        }
+
+        function handleCreateProfile() {
+            if (!window.appState.currentUser) {
+                showNotification('Для создания анкеты необходимо войти', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            showSection('create');
+        }
+
+        async function showModal(modalId) {
+            // Lazy load modals
+            if (!document.getElementById(modalId)) {
+                const modalModule = await import('/workspace/js/modals.js');
+                modalModule.loadModal(modalId);
+            }
+            
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadDeferredResources);
+        } else {
+            loadDeferredResources();
+        }
+
+        // Load core styles after initial render
+        window.addEventListener('load', function() {
+            // Hide loading indicator
+            setTimeout(() => {
+                document.querySelector('.loading-indicator').classList.remove('active');
+            }, 500);
+        });
+    </script>
+
+    <!-- Load core app module -->
+    <script type="module" src="/workspace/js/app.js" async></script>
+</body>
+</html>
