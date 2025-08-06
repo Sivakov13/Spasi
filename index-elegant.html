@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спаси и Сохрани - Православные знакомства</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: #fafafa;
+            color: #2c3e50;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: #ffffff;
+            border-bottom: 2px solid #d4af37;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #8b4513;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo i {
+            color: #d4af37;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .nav a:hover {
+            color: #8b4513;
+        }
+
+        .nav a.active {
+            color: #8b4513;
+            border-bottom: 2px solid #d4af37;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #8b4513;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid #d4af37;
+        }
+
+        .user-menu {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            padding: 1rem;
+            display: none;
+            min-width: 200px;
+            z-index: 1001;
+            border: 1px solid #d4af37;
+        }
+
+        .user-menu.active {
+            display: block;
+        }
+
+        .user-menu a {
+            display: block;
+            padding: 0.7rem;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: background 0.3s;
+            border-radius: 4px;
+        }
+
+        .user-menu a:hover {
+            background: #f8f9fa;
+        }
+
+        .user-menu hr {
+            margin: 0.5rem 0;
+            border: none;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 0.7rem 1.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #8b4513;
+            color: white;
+            border: 1px solid #8b4513;
+        }
+
+        .btn-primary:hover {
+            background: #6b3410;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(139, 69, 19, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #8b4513;
+            border: 1px solid #8b4513;
+        }
+
+        .btn-secondary:hover {
+            background: #8b4513;
+            color: white;
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f8f4e6 0%, #f0e6d2 100%);
+            color: #2c3e50;
+            padding: 4rem 0;
+            text-align: center;
+            border-bottom: 1px solid #d4af37;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: #8b4513;
+            font-weight: normal;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #8b4513;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .action-card {
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: #fafafa;
+            border: 1px solid #e9ecef;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            background: white;
+            border-color: #d4af37;
+        }
+
+        .action-icon {
+            font-size: 2.5rem;
+            color: #d4af37;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-card h3 {
+            color: #8b4513;
+            margin-bottom: 1rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 3rem 0;
+            display: none;
+            min-height: 60vh;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #8b4513;
+            font-weight: normal;
+        }
+
+        /* Profile Cards */
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 1px solid #f0f0f0;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+            border-color: #d4af37;
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #d4af37, #f4e4a6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3.5rem;
+            position: relative;
+            font-family: Georgia, serif;
+        }
+
+        .profile-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .profile-status.online {
+            background: #27ae60;
+        }
+
+        .profile-content {
+            padding: 1.5rem;
+        }
+
+        .profile-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #8b4513;
+        }
+
+        .profile-age {
+            color: #666;
+        }
+
+        .profile-location {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-quote {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #d4af37;
+        }
+
+        .profile-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .interest-tag {
+            background: #8b4513;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .share-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .share-btn.vk {
+            background: #4c75a3;
+        }
+
+        .share-btn.telegram {
+            background: #0088cc;
+        }
+
+        .share-btn.whatsapp {
+            background: #25d366;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Photo Gallery */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .photo-item {
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            cursor: pointer;
+            border: 1px solid #f0f0f0;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-3px);
+            border-color: #d4af37;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #d4af37, #f4e4a6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .photo-info {
+            padding: 1rem;
+        }
+
+        .photo-author {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #8b4513;
+        }
+
+        .photo-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .photo-likes {
+            color: #8b4513;
+        }
+
+        /* Events */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.8rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #f0f0f0;
+        }
+
+        .event-card:hover {
+            transform: translateY(-3px);
+            border-color: #d4af37;
+        }
+
+        .event-date {
+            background: #8b4513;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .event-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #8b4513;
+        }
+
+        .event-location {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .event-participants {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        /* Blog */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-3px);
+            border-color: #d4af37;
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #8b4513, #d4af37);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #8b4513;
+        }
+
+        .blog-excerpt {
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Search Form */
+        .search-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            border: 1px solid #f0f0f0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-input {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #8b4513;
+            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid #d4af37;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: #8b4513;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #8b4513;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1001;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        .notification.warning {
+            background: #f39c12;
+        }
+
+        .notification.info {
+            background: #3498db;
+        }
+
+        .badge {
+            background: #e74c3c;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8b4513;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                border-top: 1px solid #d4af37;
+            }
+
+            .nav.active {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .auth-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="showSection('home')">
+                    <i class="fas fa-cross"></i>
+                    Спаси и Сохрани
+                </div>
+                
+                <nav class="nav" id="nav">
+                    <a href="javascript:void(0)" class="active" onclick="showSection('home')">Главная</a>
+                    <a href="javascript:void(0)" onclick="showSection('profiles')">Анкеты</a>
+                    <a href="javascript:void(0)" onclick="showSection('search')">Поиск</a>
+                    <a href="javascript:void(0)" onclick="showSection('gallery')">Фотогалерея</a>
+                    <a href="javascript:void(0)" onclick="showSection('events')">Мероприятия</a>
+                    <a href="javascript:void(0)" onclick="showSection('blog')">Блог</a>
+                    <a href="javascript:void(0)" onclick="handleCreateProfile()">Создать анкету</a>
+                    <a href="javascript:void(0)" onclick="showSection('about')">О нас</a>
+                </nav>
+                
+                <div class="auth-buttons">
+                    <div id="authButtons">
+                        <button class="btn btn-secondary" onclick="showModal('loginModal')">Войти</button>
+                        <button class="btn btn-primary" onclick="showModal('registerModal')">Регистрация</button>
+                    </div>
+                    
+                    <div id="userInfo" class="user-info">
+                        <span id="userName">Имя</span>
+                        <div class="user-avatar" id="userAvatar" onclick="toggleUserMenu()">И</div>
+                    </div>
+                    
+                    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Menu Dropdown -->
+        <div id="userMenu" class="user-menu">
+            <a href="javascript:void(0)" onclick="showSection('cabinet')"><i class="fas fa-user"></i> Мой кабинет</a>
+            <a href="javascript:void(0)" onclick="showSection('messages')"><i class="fas fa-envelope"></i> Сообщения <span class="badge" id="messagesCount">0</span></a>
+            <a href="javascript:void(0)" onclick="showSection('favorites')"><i class="fas fa-heart"></i> Избранное</a>
+            <a href="javascript:void(0)" onclick="showSection('settings')"><i class="fas fa-cog"></i> Настройки</a>
+            <hr>
+            <a href="javascript:void(0)" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="container">
+                <h1>Найдите свою вторую половинку в вере</h1>
+                <p>Православная платформа знакомств для создания крепкой семьи, основанной на духовных ценностях и взаимном уважении</p>
+                
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large" onclick="handleCreateProfile()">
+                        <i class="fas fa-user-plus"></i> Создать анкету
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="showSection('profiles')">
+                        <i class="fas fa-search"></i> Смотреть анкеты
+                    </button>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">1,547</div>
+                        <div>Активных анкет</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">234</div>
+                        <div>Счастливых пар</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">127</div>
+                        <div>Венчаний</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24/7</div>
+                        <div>Поддержка</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-actions">
+            <div class="container">
+                <h2 class="section-title">Как найти свою половинку?</h2>
+                <div class="actions-grid">
+                    <div class="action-card" onclick="showModal('registerModal')">
+                        <div class="action-icon"><i class="fas fa-user-plus"></i></div>
+                        <h3>Регистрация</h3>
+                        <p>Создайте профиль и расскажите о себе, своих интересах и духовных ценностях</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('search')">
+                        <div class="action-icon"><i class="fas fa-search"></i></div>
+                        <h3>Поиск</h3>
+                        <p>Найдите единомышленника по духовным критериям и жизненным принципам</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('profiles')">
+                        <div class="action-icon"><i class="fas fa-comments"></i></div>
+                        <h3>Общение</h3>
+                        <p>Начните знакомство и постепенно узнавайте друг друга</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('events')">
+                        <div class="action-icon"><i class="fas fa-calendar"></i></div>
+                        <h3>Встречи</h3>
+                        <p>Участвуйте в православных мероприятиях и знакомьтесь лично</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profiles Section -->
+    <section id="profiles" class="section">
+        <div class="container">
+            <h2 class="section-title">Рекомендуемые анкеты</h2>
+            
+            <div class="profiles-grid" id="profilesGrid">
+                <!-- Profiles will be loaded here -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="loadMoreProfiles()">
+                    <i class="fas fa-plus"></i> Показать ещё анкеты
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section id="gallery" class="section">
+        <div class="container">
+            <h2 class="section-title">Фотогалерея участников</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                Моменты из духовной жизни наших пользователей
+            </p>
+            
+            <div class="photo-gallery" id="photoGallery">
+                <!-- Photo gallery will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="section">
+        <div class="container">
+            <h2 class="section-title">Православные мероприятия</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                Встречайтесь в реальной жизни на духовных событиях
+            </p>
+            
+            <div class="events-grid" id="eventsGrid">
+                <!-- Events will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="section">
+        <div class="container">
+            <h2 class="section-title">Православный блог</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                Статьи о семье, любви и православной жизни
+            </p>
+            
+            <div class="blog-grid" id="blogGrid">
+                <!-- Blog posts will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section id="search" class="section">
+        <div class="container">
+            <h2 class="section-title">Расширенный поиск</h2>
+            
+            <div class="search-form">
+                <form onsubmit="performSearch(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Я ищу</label>
+                            <select class="form-input" name="gender">
+                                <option value="">Любой пол</option>
+                                <option value="male">Мужчину</option>
+                                <option value="female">Женщину</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Возраст от</label>
+                            <input type="number" class="form-input" name="ageFrom" min="18" placeholder="18">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Возраст до</label>
+                            <input type="number" class="form-input" name="ageTo" max="80" placeholder="50">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Город</label>
+                            <input type="text" class="form-input" name="city" placeholder="Любой город">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Воцерковленность</label>
+                            <select class="form-input" name="churchStatus">
+                                <option value="">Любая</option>
+                                <option value="воцерковленный">Воцерковлённый</option>
+                                <option value="неофит">Неофит</option>
+                                <option value="ищущий">Ищущий веру</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Семейное положение</label>
+                            <select class="form-input" name="maritalStatus">
+                                <option value="">Любое</option>
+                                <option value="холост">Холост/Не замужем</option>
+                                <option value="разведен">Разведён/а</option>
+                                <option value="вдовец">Вдовец/Вдова</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="fas fa-search"></i> Найти подходящих людей
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div id="searchResults" style="display: none;">
+                <h3 style="margin-top: 2rem; color: #8b4513;">Результаты поиска</h3>
+                <div class="profiles-grid" id="searchResultsGrid">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cabinet Section -->
+    <section id="cabinet" class="section">
+        <div class="container">
+            <h2 class="section-title">Личный кабинет</h2>
+            <div style="text-align: center; padding: 3rem;">
+                <div style="background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-width: 500px; margin: 0 auto; border: 1px solid #f0f0f0;">
+                    <i class="fas fa-user-circle" style="font-size: 4rem; color: #d4af37; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #8b4513; margin-bottom: 1rem;">Добро пожаловать в личный кабинет!</h3>
+                    <p style="margin: 1rem 0; color: #666;">Здесь вы можете управлять своей анкетой, просматривать сообщения и настройки.</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="showSection('profiles')">
+                            <i class="fas fa-users"></i> Смотреть анкеты
+                        </button>
+                        <button class="btn btn-secondary" onclick="showSection('search')">
+                            <i class="fas fa-search"></i> Поиск
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Messages Section -->
+    <section id="messages" class="section">
+        <div class="container">
+            <h2 class="section-title">Сообщения</h2>
+            <div style="text-align: center; padding: 3rem;">
+                <div style="background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-width: 500px; margin: 0 auto; border: 1px solid #f0f0f0;">
+                    <i class="fas fa-envelope" style="font-size: 4rem; color: #d4af37; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #8b4513; margin-bottom: 1rem;">У вас пока нет сообщений</h3>
+                    <p style="margin: 1rem 0; color: #666;">Начните общаться с другими пользователями, чтобы найти свою вторую половинку!</p>
+                    <button class="btn btn-primary" onclick="showSection('profiles')">
+                        <i class="fas fa-users"></i> Найти собеседника
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Favorites Section -->
+    <section id="favorites" class="section">
+        <div class="container">
+            <h2 class="section-title">Избранное</h2>
+            <div id="favoritesGrid">
+                <div style="text-align: center; padding: 3rem;">
+                    <div style="background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-width: 500px; margin: 0 auto; border: 1px solid #f0f0f0;">
+                        <i class="fas fa-heart" style="font-size: 4rem; color: #d4af37; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #8b4513; margin-bottom: 1rem;">У вас пока нет избранных анкет</h3>
+                        <p style="margin: 1rem 0; color: #666;">Добавляйте понравившиеся анкеты в избранное, чтобы не потерять их!</p>
+                        <button class="btn btn-primary" onclick="showSection('profiles')">
+                            <i class="fas fa-search"></i> Найти анкеты
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings" class="section">
+        <div class="container">
+            <h2 class="section-title">Настройки</h2>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #f0f0f0;">
+                    <h3 style="margin-bottom: 1rem; color: #8b4513;">Настройки приватности</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked> Показывать мою анкету в поиске
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked> Разрешить отправку мне сообщений
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Скрыть мой онлайн статус
+                    </label>
+                    
+                    <h3 style="margin: 2rem 0 1rem; color: #8b4513;">Уведомления</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked> Новые сообщения
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked> Кто-то добавил в избранное
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Новые анкеты по моим критериям
+                    </label>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="showNotification('Настройки сохранены!')">
+                            <i class="fas fa-save"></i> Сохранить настройки
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">О платформе</h2>
+            
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <div style="background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #f0f0f0;">
+                    <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #555;">
+                        "Спаси и Сохрани" — это православная платформа знакомств для верующих людей, 
+                        которые ищут спутника жизни для создания крепкой семьи, основанной на общих духовных ценностях.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                        <div>
+                            <i class="fas fa-heart" style="font-size: 3rem; color: #d4af37; margin-bottom: 1rem;"></i>
+                            <h3 style="color: #8b4513; margin-bottom: 1rem;">Серьезные отношения</h3>
+                            <p>Только для тех, кто ищет спутника жизни для создания семьи</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-cross" style="font-size: 3rem; color: #d4af37; margin-bottom: 1rem;"></i>
+                            <h3 style="color: #8b4513; margin-bottom: 1rem;">Православные ценности</h3>
+                            <p>Объединяем людей с общими духовными ценностями</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-shield-alt" style="font-size: 3rem; color: #d4af37; margin-bottom: 1rem;"></i>
+                            <h3 style="color: #8b4513; margin-bottom: 1rem;">Безопасность</h3>
+                            <p>Проверка анкет и защита личных данных</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 3rem; padding: 2rem; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #d4af37;">
+                        <h3 style="color: #8b4513; margin-bottom: 1rem;">Контакты</h3>
+                        <p><strong>Email:</strong> info@spasi-sohrani.ru</p>
+                        <p><strong>Телефон:</strong> +7 (495) 123-45-67</p>
+                        <p><strong>Адрес:</strong> Москва, ул. Православная, д. 1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Вход в систему</h2>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required id="loginEmail" placeholder="example@mail.ru">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-input" required id="loginPassword" placeholder="Введите пароль">
+                </div>
+                
+                <label class="checkbox-label">
+                    <input type="checkbox"> Запомнить меня
+                </label>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+                
+                <p style="text-align: center; margin-top: 1rem;">
+                    <a href="javascript:void(0)" style="color: #8b4513;">Забыли пароль?</a>
+                </p>
+                
+                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #e9ecef;">
+                
+                <p style="text-align: center;">
+                    Нет аккаунта? <a href="javascript:void(0)" onclick="closeModal('loginModal'); showModal('registerModal')" style="color: #8b4513;">Зарегистрируйтесь</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Регистрация</h2>
+                <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            
+            <form onsubmit="register(event)">
+                <div class="form-group">
+                    <label class="form-label">Имя</label>
+                    <input type="text" class="form-input" required id="registerName" placeholder="Ваше имя">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required id="registerEmail" placeholder="example@mail.ru">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-input" required id="registerPassword" placeholder="Минимум 6 символов">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Подтвердите пароль</label>
+                    <input type="password" class="form-input" required id="registerPasswordConfirm" placeholder="Повторите пароль">
+                </div>
+                
+                <label class="checkbox-label">
+                    <input type="checkbox" required> Я согласен с правилами платформы
+                </label>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-user-plus"></i> Зарегистрироваться
+                </button>
+                
+                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #e9ecef;">
+                
+                <p style="text-align: center;">
+                    Есть аккаунт? <a href="javascript:void(0)" onclick="closeModal('registerModal'); showModal('loginModal')" style="color: #8b4513;">Войдите</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Enhanced JavaScript with elegant functionality
+        let currentUser = null;
+        let profiles = [];
+        let favorites = [];
+        let currentProfileId = null;
+        let photos = [];
+        let events = [];
+        let blogPosts = [];
+
+        // Initialize profiles data
+        function initializeProfiles() {
+            profiles = [
+                {
+                    id: 1,
+                    name: 'Мария',
+                    age: 28,
+                    city: 'Москва',
+                    avatar: 'М',
+                    gender: 'female',
+                    churchStatus: 'воцерковленная',
+                    maritalStatus: 'не замужем',
+                    online: true,
+                    quote: 'Ищу верующего человека для создания крепкой православной семьи, основанной на взаимной любви и уважении',
+                    about: 'Преподаю в воскресной школе, люблю паломничества по святым местам. Ищу серьезные отношения с православным мужчиной для создания семьи.',
+                    interests: ['паломничество', 'церковное пение', 'чтение', 'благотворительность'],
+                    education: 'высшее',
+                    profession: 'Преподаватель',
+                    hasPhoto: true,
+                    photoCount: 3
+                },
+                {
+                    id: 2,
+                    name: 'Александр',
+                    age: 32,
+                    city: 'Санкт-Петербург',
+                    avatar: 'А',
+                    gender: 'male',
+                    churchStatus: 'воцерковленный',
+                    maritalStatus: 'холост',
+                    online: true,
+                    quote: 'Воцерковленный христианин, ищу спутницу жизни для совместного пути к Богу и создания православной семьи',
+                    about: 'Служу в алтаре, участвую в приходской жизни. Ищу верующую девушку для создания семьи в вере и любви.',
+                    interests: ['богословие', 'благотворительность', 'чтение', 'паломничество'],
+                    education: 'высшее',
+                    profession: 'Инженер',
+                    hasPhoto: true,
+                    photoCount: 2
+                },
+                {
+                    id: 3,
+                    name: 'Елена',
+                    age: 26,
+                    city: 'Екатеринбург',
+                    avatar: 'Е',
+                    gender: 'female',
+                    churchStatus: 'неофит',
+                    maritalStatus: 'не замужем',
+                    online: false,
+                    quote: 'Недавно пришла к вере, ищу человека, который поможет мне расти духовно и создать христианскую семью',
+                    about: 'Два года назад крестилась, активно изучаю Православие. Ищу понимающего и терпеливого человека для совместного духовного роста.',
+                    interests: ['богословие', 'природа', 'чтение', 'рукоделие'],
+                    education: 'среднее специальное',
+                    profession: 'Медсестра',
+                    hasPhoto: true,
+                    photoCount: 4
+                },
+                {
+                    id: 4,
+                    name: 'Дмитрий',
+                    age: 35,
+                    city: 'Новосибирск',
+                    avatar: 'Д',
+                    gender: 'male',
+                    churchStatus: 'воцерковленный',
+                    maritalStatus: 'разведен',
+                    online: false,
+                    quote: 'После развода нашел утешение в вере. Ищу верующую спутницу для создания новой православной семьи',
+                    about: 'Имею церковный развод. Воспитываю сына. Регулярно посещаю храм, участвую в паломничествах.',
+                    interests: ['паломничество', 'спорт', 'путешествия', 'чтение'],
+                    education: 'высшее',
+                    profession: 'Врач',
+                    hasPhoto: true,
+                    photoCount: 4
+                }
+            ];
+        }
+
+        // Initialize photo gallery
+        function initializePhotos() {
+            photos = [
+                {
+                    id: 1,
+                    author: 'Мария',
+                    title: 'Паломничество в Троице-Сергиеву Лавру',
+                    likes: 24,
+                    comments: 8
+                },
+                {
+                    id: 2,
+                    author: 'Александр',
+                    title: 'Служение в храме',
+                    likes: 18,
+                    comments: 5
+                },
+                {
+                    id: 3,
+                    author: 'Елена',
+                    title: 'Молитва на природе',
+                    likes: 32,
+                    comments: 12
+                },
+                {
+                    id: 4,
+                    author: 'Дмитрий',
+                    title: 'С сыном в храме',
+                    likes: 15,
+                    comments: 6
+                }
+            ];
+        }
+
+        // Initialize events
+        function initializeEvents() {
+            events = [
+                {
+                    id: 1,
+                    title: 'Паломничество в Троице-Сергиеву Лавру',
+                    date: '15 сентября 2024',
+                    location: 'Сергиев Посад',
+                    description: 'Совместная поездка к святым местам для духовного общения и знакомства единомышленников.',
+                    participants: 24,
+                    maxParticipants: 40
+                },
+                {
+                    id: 2,
+                    title: 'Встреча православной молодежи',
+                    date: '22 сентября 2024',
+                    location: 'Москва, Храм Христа Спасителя',
+                    description: 'Обсуждение вопросов семьи и веры в кругу единомышленников. Чаепитие и знакомства.',
+                    participants: 18,
+                    maxParticipants: 30
+                },
+                {
+                    id: 3,
+                    title: 'Концерт духовной музыки',
+                    date: '1 октября 2024',
+                    location: 'Санкт-Петербург, Исаакиевский собор',
+                    description: 'Вечер церковного пения и духовных песнопений. Возможность культурного общения.',
+                    participants: 67,
+                    maxParticipants: 100
+                }
+            ];
+        }
+
+        // Initialize blog posts
+        function initializeBlog() {
+            blogPosts = [
+                {
+                    id: 1,
+                    title: 'Как создать православную семью в современном мире',
+                    excerpt: 'Размышления о том, как сохранить духовные ценности в семейной жизни и воспитать детей в вере в условиях современного общества...',
+                    author: 'Протоиерей Андрей Ткачев',
+                    date: '10 августа 2024',
+                    readTime: '8 мин'
+                },
+                {
+                    id: 2,
+                    title: 'Знакомство и венчание: православный взгляд',
+                    excerpt: 'О том, как правильно строить отношения до брака, готовиться к таинству венчания и создавать крепкую семью...',
+                    author: 'Матушка Елена Михайлова',
+                    date: '5 августа 2024',
+                    readTime: '6 мин'
+                },
+                {
+                    id: 3,
+                    title: 'Молитва в семейной жизни',
+                    excerpt: 'Важность совместной молитвы супругов, семейных традиций в православном доме и духовного воспитания детей...',
+                    author: 'Иерей Михаил Козлов',
+                    date: '1 августа 2024',
+                    readTime: '5 мин'
+                }
+            ];
+        }
+
+        // Enhanced profile card creation
+        function createEnhancedProfileCard(profile) {
+            const interestTags = profile.interests.map(interest => 
+                `<span class="interest-tag">${interest}</span>`
+            ).join('');
+            
+            const statusClass = profile.online ? 'online' : '';
+            const statusText = profile.online ? 'Онлайн' : 'Был(а) недавно';
+            
+            return `
+                <div class="profile-card" onclick="showProfile(${profile.id})">
+                    <div class="profile-photo">
+                        ${profile.avatar}
+                        <div class="profile-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="profile-content">
+                        <div class="profile-name">
+                            ${profile.name}, <span class="profile-age">${profile.age} лет</span>
+                        </div>
+                        <div class="profile-location"><i class="fas fa-map-marker-alt"></i> ${profile.city}</div>
+                        <div class="profile-quote">"${profile.quote}"</div>
+                        <div class="profile-interests">${interestTags}</div>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary btn-small" onclick="handleMessage(event, ${profile.id})">
+                                <i class="fas fa-envelope"></i> Написать
+                            </button>
+                            <button class="btn btn-secondary btn-small" onclick="handleFavorite(event, ${profile.id})">
+                                <i class="fas fa-heart"></i> В избранное
+                            </button>
+                        </div>
+                        <div class="share-buttons">
+                            <a href="javascript:void(0)" class="share-btn vk" onclick="shareProfile(event, ${profile.id}, 'vk')">
+                                <i class="fab fa-vk"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="share-btn telegram" onclick="shareProfile(event, ${profile.id}, 'telegram')">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="share-btn whatsapp" onclick="shareProfile(event, ${profile.id}, 'whatsapp')">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load photo gallery
+        function loadPhotoGallery() {
+            const gallery = document.getElementById('photoGallery');
+            if (!gallery) return;
+
+            gallery.innerHTML = photos.map(photo => `
+                <div class="photo-item" onclick="showPhotoModal(${photo.id})">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="photo-info">
+                        <div class="photo-author">${photo.author}</div>
+                        <div>${photo.title}</div>
+                        <div class="photo-stats">
+                            <span class="photo-likes">
+                                <i class="fas fa-heart"></i> ${photo.likes}
+                            </span>
+                            <span>
+                                <i class="fas fa-comment"></i> ${photo.comments}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load events
+        function loadEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            if (!eventsGrid) return;
+
+            eventsGrid.innerHTML = events.map(event => `
+                <div class="event-card">
+                    <div class="event-date">
+                        <i class="fas fa-calendar"></i> ${event.date}
+                    </div>
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i> ${event.location}
+                    </div>
+                    <div style="margin: 1rem 0;">${event.description}</div>
+                    <div class="event-participants">
+                        <span>
+                            <i class="fas fa-users"></i>
+                            ${event.participants}/${event.maxParticipants} участников
+                        </span>
+                        <button class="btn btn-primary btn-small" onclick="joinEvent(${event.id})">
+                            <i class="fas fa-plus"></i> Участвовать
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load blog
+        function loadBlog() {
+            const blogGrid = document.getElementById('blogGrid');
+            if (!blogGrid) return;
+
+            blogGrid.innerHTML = blogPosts.map(post => `
+                <div class="blog-card" onclick="showBlogPost(${post.id})">
+                    <div class="blog-image">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-title">${post.title}</div>
+                        <div class="blog-excerpt">${post.excerpt}</div>
+                        <div class="blog-meta">
+                            <span><i class="fas fa-user"></i> ${post.author}</span>
+                            <span><i class="fas fa-clock"></i> ${post.readTime}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // All core functions
+        function loadProfiles() {
+            const grid = document.getElementById('profilesGrid');
+            if (grid) {
+                grid.innerHTML = profiles.map(profile => createEnhancedProfileCard(profile)).join('');
+            }
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+                
+                document.querySelectorAll('.nav a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                const navLinks = document.querySelectorAll('.nav a');
+                navLinks.forEach(link => {
+                    if (link.textContent.toLowerCase().includes(getNavText(sectionId))) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                const nav = document.getElementById('nav');
+                if (nav) {
+                    nav.classList.remove('active');
+                }
+                
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function getNavText(sectionId) {
+            const navMap = {
+                'home': 'главная',
+                'profiles': 'анкеты',
+                'search': 'поиск',
+                'gallery': 'фотогалерея',
+                'events': 'мероприятия',
+                'blog': 'блог',
+                'create': 'создать',
+                'about': 'о нас'
+            };
+            return navMap[sectionId] || '';
+        }
+
+        function toggleMobileMenu() {
+            const nav = document.getElementById('nav');
+            if (nav) {
+                nav.classList.toggle('active');
+            }
+        }
+
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) {
+                userMenu.classList.toggle('active');
+            }
+        }
+
+        function shareProfile(event, profileId, platform) {
+            event.stopPropagation();
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+
+            const url = `${window.location.origin}?profile=${profileId}`;
+            const text = `Познакомьтесь с ${profile.name} на сайте православных знакомств "Спаси и Сохрани"`;
+
+            switch(platform) {
+                case 'vk':
+                    window.open(`https://vk.com/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(text)}`);
+                    break;
+                case 'telegram':
+                    window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+                    break;
+                case 'whatsapp':
+                    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`);
+                    break;
+            }
+            
+            showNotification(`Профиль ${profile.name} поделён в социальной сети!`);
+        }
+
+        function joinEvent(eventId) {
+            if (!currentUser) {
+                showNotification('Для участия в мероприятиях необходимо войти в систему', 'warning');
+                showModal('loginModal');
+                return;
+            }
+
+            const event = events.find(e => e.id === eventId);
+            if (event && event.participants < event.maxParticipants) {
+                event.participants++;
+                showNotification(`Вы записались на мероприятие "${event.title}"!`);
+                loadEvents();
+            } else {
+                showNotification('К сожалению, мест на мероприятии больше нет', 'warning');
+            }
+        }
+
+        function showPhotoModal(photoId) {
+            const photo = photos.find(p => p.id === photoId);
+            if (!photo) return;
+            
+            showNotification(`Просмотр фото "${photo.title}" от ${photo.author}`);
+        }
+
+        function showBlogPost(postId) {
+            const post = blogPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            showNotification(`Открытие статьи "${post.title}"`);
+        }
+
+        function showProfile(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+            
+            showNotification(`Просмотр профиля ${profile.name}, ${profile.age} лет`);
+        }
+
+        function handleMessage(event, profileId) {
+            event.stopPropagation();
+            if (!currentUser) {
+                showNotification('Для отправки сообщений необходимо войти в систему', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            
+            const profile = profiles.find(p => p.id === profileId);
+            showNotification(`Сообщение отправлено пользователю ${profile ? profile.name : 'пользователю'}!`);
+        }
+
+        function handleFavorite(event, profileId) {
+            event.stopPropagation();
+            if (!currentUser) {
+                showNotification('Для добавления в избранное необходимо войти в систему', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            
+            const profile = profiles.find(p => p.id === profileId);
+            if (favorites.includes(profileId)) {
+                favorites = favorites.filter(id => id !== profileId);
+                showNotification(`${profile ? profile.name : 'Анкета'} удалена из избранного`);
+            } else {
+                favorites.push(profileId);
+                showNotification(`${profile ? profile.name : 'Анкета'} добавлена в избранное`);
+            }
+        }
+
+        function handleCreateProfile() {
+            if (!currentUser) {
+                showNotification('Для создания анкеты необходимо войти в систему', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            
+            showNotification('Функция создания анкеты будет доступна в полной версии', 'info');
+        }
+
+        function loadMoreProfiles() {
+            showNotification('Загружаем дополнительные анкеты...', 'info');
+            
+            setTimeout(() => {
+                const moreProfiles = [
+                    {
+                        id: profiles.length + 1,
+                        name: 'Ольга',
+                        age: 29,
+                        city: 'Ростов-на-Дону',
+                        avatar: 'О',
+                        gender: 'female',
+                        churchStatus: 'воцерковленная',
+                        maritalStatus: 'не замужем',
+                        online: false,
+                        quote: 'Ищу православного мужчину для создания семьи в вере и взаимной любви',
+                        about: 'Работаю в православной гимназии, веду благотворительные проекты.',
+                        interests: ['благотворительность', 'чтение', 'природа', 'рукоделие'],
+                        education: 'высшее',
+                        profession: 'Педагог',
+                        hasPhoto: true,
+                        photoCount: 2
+                    }
+                ];
+                
+                profiles.push(...moreProfiles);
+                
+                const grid = document.getElementById('profilesGrid');
+                if (grid) {
+                    grid.innerHTML += moreProfiles.map(profile => createEnhancedProfileCard(profile)).join('');
+                }
+                
+                showNotification('Загружены новые анкеты');
+            }, 1000);
+        }
+
+        function performSearch(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const searchParams = Object.fromEntries(formData);
+            
+            let results = [...profiles];
+            
+            if (searchParams.gender) {
+                results = results.filter(p => p.gender === searchParams.gender);
+            }
+            
+            if (searchParams.ageFrom) {
+                results = results.filter(p => p.age >= parseInt(searchParams.ageFrom));
+            }
+            
+            if (searchParams.ageTo) {
+                results = results.filter(p => p.age <= parseInt(searchParams.ageTo));
+            }
+            
+            if (searchParams.city) {
+                results = results.filter(p => 
+                    p.city.toLowerCase().includes(searchParams.city.toLowerCase())
+                );
+            }
+            
+            if (searchParams.churchStatus) {
+                results = results.filter(p => p.churchStatus === searchParams.churchStatus);
+            }
+            
+            if (searchParams.maritalStatus) {
+                results = results.filter(p => p.maritalStatus.includes(searchParams.maritalStatus));
+            }
+            
+            const resultsGrid = document.getElementById('searchResultsGrid');
+            const searchResults = document.getElementById('searchResults');
+            
+            if (resultsGrid && searchResults) {
+                if (results.length === 0) {
+                    resultsGrid.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">По вашим критериям анкеты не найдены. Попробуйте изменить параметры поиска.</p>';
+                } else {
+                    resultsGrid.innerHTML = results.map(profile => createEnhancedProfileCard(profile)).join('');
+                }
+                
+                searchResults.style.display = 'block';
+                showNotification(`Найдено анкет: ${results.length}`);
+                
+                searchResults.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function login(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (email && password) {
+                currentUser = {
+                    name: email.split('@')[0],
+                    email: email,
+                    avatar: email[0].toUpperCase()
+                };
+                
+                updateAuthUI();
+                closeModal('loginModal');
+                showNotification('Добро пожаловать! Вход выполнен успешно!');
+                
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            }
+        }
+
+        function register(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            
+            if (password !== passwordConfirm) {
+                showNotification('Пароли не совпадают', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('Пароль должен содержать минимум 6 символов', 'error');
+                return;
+            }
+            
+            if (name && email && password) {
+                currentUser = {
+                    name: name,
+                    email: email,
+                    avatar: name[0].toUpperCase()
+                };
+                
+                updateAuthUI();
+                closeModal('registerModal');
+                showNotification(`Добро пожаловать, ${name}! Регистрация успешна!`);
+                
+                document.getElementById('registerName').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerPasswordConfirm').value = '';
+            }
+        }
+
+        function updateAuthUI() {
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+            const messagesCount = document.getElementById('messagesCount');
+            
+            if (currentUser) {
+                if (authButtons) authButtons.style.display = 'none';
+                if (userInfo) userInfo.style.display = 'flex';
+                if (userName) userName.textContent = currentUser.name;
+                if (userAvatar) userAvatar.textContent = currentUser.avatar;
+                if (messagesCount) messagesCount.textContent = '3';
+            } else {
+                if (authButtons) authButtons.style.display = 'flex';
+                if (userInfo) userInfo.style.display = 'none';
+                if (messagesCount) messagesCount.textContent = '0';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            favorites = [];
+            updateAuthUI();
+            showNotification('Вы вышли из системы. До свидания!');
+            showSection('home');
+            
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) {
+                userMenu.classList.remove('active');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 4000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeProfiles();
+            initializePhotos();
+            initializeEvents();
+            initializeBlog();
+            
+            loadProfiles();
+            loadPhotoGallery();
+            loadEvents();
+            loadBlog();
+            
+            // Event listeners
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#userAvatar') && !e.target.closest('#userMenu')) {
+                    const userMenu = document.getElementById('userMenu');
+                    if (userMenu) {
+                        userMenu.classList.remove('active');
+                    }
+                }
+            });
+
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        if (modal.style.display === 'block') {
+                            modal.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
