@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спаси и Сохрани - Православные знакомства</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Georgia, serif; background: #fafafa; color: #2c3e50; line-height: 1.7; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        .header { background: #ffffff; border-bottom: 2px solid #d4af37; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.6rem; font-weight: bold; color: #8b4513; cursor: pointer; }
+        .logo i { color: #d4af37; }
+        .nav { display: flex; gap: 2rem; list-style: none; }
+        .nav a { text-decoration: none; color: #2c3e50; font-weight: 500; transition: color 0.3s; cursor: pointer; padding: 0.5rem 0; }
+        .nav a:hover, .nav a.active { color: #8b4513; border-bottom: 2px solid #d4af37; }
+        .auth-buttons { display: flex; gap: 1rem; align-items: center; }
+        .user-info { display: none; align-items: center; gap: 1rem; }
+        .user-avatar { width: 40px; height: 40px; background: #8b4513; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: 2px solid #d4af37; }
+        .user-menu { position: absolute; top: 70px; right: 20px; background: white; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); padding: 1rem; display: none; min-width: 200px; z-index: 1001; border: 1px solid #d4af37; }
+        .user-menu.active { display: block; }
+        .user-menu a { display: block; padding: 0.7rem; color: #2c3e50; text-decoration: none; transition: background 0.3s; border-radius: 4px; }
+        .user-menu a:hover { background: #f8f9fa; }
+
+        /* Buttons */
+        .btn { padding: 0.7rem 1.8rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 14px; font-family: inherit; }
+        .btn-primary { background: #8b4513; color: white; border: 1px solid #8b4513; }
+        .btn-primary:hover { background: #6b3410; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(139, 69, 19, 0.3); }
+        .btn-secondary { background: white; color: #8b4513; border: 1px solid #8b4513; }
+        .btn-secondary:hover { background: #8b4513; color: white; }
+        .btn-large { padding: 1rem 2.5rem; font-size: 1.1rem; }
+        .btn-small { padding: 0.5rem 1rem; font-size: 0.9rem; }
+
+        /* Hero */
+        .hero { background: linear-gradient(135deg, #f8f4e6 0%, #f0e6d2 100%); color: #2c3e50; padding: 4rem 0; text-align: center; border-bottom: 1px solid #d4af37; }
+        .hero h1 { font-size: 2.8rem; margin-bottom: 1rem; color: #8b4513; font-weight: normal; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .stat-card { background: rgba(255,255,255,0.7); padding: 2rem; border-radius: 8px; text-align: center; transition: transform 0.3s; border: 1px solid rgba(212, 175, 55, 0.3); }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-number { font-size: 2.2rem; font-weight: bold; margin-bottom: 0.5rem; color: #8b4513; }
+
+        /* Sections */
+        .section { padding: 3rem 0; display: none; min-height: 60vh; }
+        .section.active { display: block; }
+        .section-title { font-size: 2.2rem; margin-bottom: 2rem; text-align: center; color: #8b4513; font-weight: normal; }
+
+        /* Profile Cards */
+        .profiles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .profile-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; border: 1px solid #f0f0f0; }
+        .profile-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.12); border-color: #d4af37; }
+        .profile-photo { width: 100%; height: 220px; background: linear-gradient(135deg, #d4af37, #f4e4a6); display: flex; align-items: center; justify-content: center; color: white; font-size: 3.5rem; position: relative; font-family: Georgia, serif; }
+        .profile-status { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 0.3rem 0.7rem; border-radius: 12px; font-size: 0.75rem; }
+        .profile-status.online { background: #27ae60; }
+        .profile-content { padding: 1.5rem; }
+        .profile-name { font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem; color: #8b4513; }
+        .profile-age { color: #666; }
+        .profile-location { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+        .profile-quote { font-style: italic; color: #555; margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #d4af37; }
+        .profile-interests { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+        .interest-tag { background: #8b4513; color: white; padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; }
+        .profile-actions { display: flex; gap: 0.5rem; justify-content: space-between; }
+        .share-buttons { display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: center; }
+        .share-btn { padding: 0.5rem; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s; color: white; text-decoration: none; display: flex; align-items: center; gap: 0.3rem; font-size: 0.8rem; }
+        .share-btn.vk { background: #4c75a3; }
+        .share-btn.telegram { background: #0088cc; }
+        .share-btn.whatsapp { background: #25d366; }
+        .share-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; border: 1px solid #d4af37; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-header h2 { color: #8b4513; }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; transition: color 0.3s; }
+        .modal-close:hover { color: #8b4513; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+        .form-label { margin-bottom: 0.5rem; font-weight: 500; color: #2c3e50; }
+        .form-input { padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; transition: border-color 0.3s; font-family: inherit; }
+        .form-input:focus { outline: none; border-color: #8b4513; box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1); }
+        .checkbox-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 1rem; }
+
+        /* Notification */
+        .notification { position: fixed; top: 20px; right: 20px; background: #27ae60; color: white; padding: 1rem 1.5rem; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); display: none; z-index: 1001; }
+        .notification.error { background: #e74c3c; }
+        .notification.warning { background: #f39c12; }
+        .notification.info { background: #3498db; }
+        .badge { background: #e74c3c; color: white; padding: 0.2rem 0.5rem; border-radius: 8px; font-size: 0.75rem; margin-left: 0.5rem; }
+
+        /* Chat */
+        .chat-container { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); height: 500px; display: flex; flex-direction: column; }
+        .chat-header { padding: 1rem; border-bottom: 1px solid #e9ecef; background: #f8f9fa; border-radius: 8px 8px 0 0; }
+        .chat-messages { flex: 1; padding: 1rem; overflow-y: auto; }
+        .chat-message { margin-bottom: 1rem; }
+        .message-sent { text-align: right; }
+        .message-received { text-align: left; }
+        .message-bubble { display: inline-block; padding: 0.8rem 1.2rem; border-radius: 18px; max-width: 70%; word-wrap: break-word; }
+        .message-sent .message-bubble { background: #8b4513; color: white; }
+        .message-received .message-bubble { background: #f0f0f0; color: #333; }
+        .message-time { font-size: 0.75rem; color: #999; margin-top: 0.25rem; }
+        .chat-input { display: flex; padding: 1rem; border-top: 1px solid #e9ecef; }
+        .chat-input input { flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 20px; margin-right: 0.5rem; }
+        .chat-input button { border-radius: 50%; width: 40px; height: 40px; padding: 0; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; flex-direction: column; padding: 1rem; box-shadow: 0 5px 10px rgba(0,0,0,0.1); border-top: 1px solid #d4af37; }
+            .nav.active { display: flex; }
+            .hero h1 { font-size: 2.2rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .hero-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="showSection('home')">
+                    <i class="fas fa-cross"></i>
+                    Спаси и Сохрани
+                </div>
+                
+                <nav class="nav" id="nav">
+                    <a href="javascript:void(0)" class="active" onclick="showSection('home')">Главная</a>
+                    <a href="javascript:void(0)" onclick="showSection('profiles')">Анкеты</a>
+                    <a href="javascript:void(0)" onclick="showSection('search')">Поиск</a>
+                    <a href="javascript:void(0)" onclick="showSection('gallery')">Фотогалерея</a>
+                    <a href="javascript:void(0)" onclick="showSection('events')">Мероприятия</a>
+                    <a href="javascript:void(0)" onclick="showSection('blog')">Блог</a>
+                    <a href="javascript:void(0)" onclick="showSection('about')">О нас</a>
+                </nav>
+                
+                <div class="auth-buttons">
+                    <div id="authButtons">
+                        <button class="btn btn-secondary" onclick="showModal('loginModal')">Войти</button>
+                        <button class="btn btn-primary" onclick="showModal('registerModal')">Регистрация</button>
+                    </div>
+                    
+                    <div id="userInfo" class="user-info">
+                        <span id="userName">Имя</span>
+                        <div class="user-avatar" id="userAvatar" onclick="toggleUserMenu()">И</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="userMenu" class="user-menu">
+            <a href="javascript:void(0)" onclick="showSection('cabinet')"><i class="fas fa-user"></i> Мой кабинет</a>
+            <a href="javascript:void(0)" onclick="showSection('messages')"><i class="fas fa-envelope"></i> Сообщения <span class="badge" id="messagesCount">0</span></a>
+            <a href="javascript:void(0)" onclick="showSection('favorites')"><i class="fas fa-heart"></i> Избранное</a>
+            <a href="javascript:void(0)" onclick="showSection('settings')"><i class="fas fa-cog"></i> Настройки</a>
+            <hr>
+            <a href="javascript:void(0)" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="container">
+                <h1>Найдите свою вторую половинку в вере</h1>
+                <p>Православная платформа знакомств для создания крепкой семьи, основанной на духовных ценностях</p>
+                
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large" onclick="handleCreateProfile()">
+                        <i class="fas fa-user-plus"></i> Создать анкету
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="showSection('profiles')">
+                        <i class="fas fa-search"></i> Смотреть анкеты
+                    </button>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">1,547</div>
+                        <div>Активных анкет</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">234</div>
+                        <div>Счастливых пар</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">127</div>
+                        <div>Венчаний</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24/7</div>
+                        <div>Поддержка</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profiles Section -->
+    <section id="profiles" class="section">
+        <div class="container">
+            <h2 class="section-title">Рекомендуемые анкеты</h2>
+            <div class="profiles-grid" id="profilesGrid"></div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="loadMoreProfiles()">
+                    <i class="fas fa-plus"></i> Показать ещё анкеты
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Messages Section -->
+    <section id="messages" class="section">
+        <div class="container">
+            <h2 class="section-title">Сообщения</h2>
+            <div id="messagesContent">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h3>Чат с Мария</h3>
+                        <span style="color: #27ae60;">● Онлайн</span>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-message message-received">
+                            <div class="message-bubble">Здравствуйте! Меня заинтересовала ваша анкета.</div>
+                            <div class="message-time">14:30</div>
+                        </div>
+                        <div class="chat-message message-sent">
+                            <div class="message-bubble">Здравствуйте! Очень приятно познакомиться.</div>
+                            <div class="message-time">14:32</div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" placeholder="Введите сообщение..." id="messageInput" onkeypress="handleEnterKey(event)">
+                        <button class="btn btn-primary" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other sections... -->
+    <section id="search" class="section">
+        <div class="container">
+            <h2 class="section-title">Расширенный поиск</h2>
+            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                <form onsubmit="performSearch(event)">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Я ищу</label>
+                            <select class="form-input" name="gender">
+                                <option value="">Любой пол</option>
+                                <option value="male">Мужчину</option>
+                                <option value="female">Женщину</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Возраст от</label>
+                            <input type="number" class="form-input" name="ageFrom" min="18" placeholder="18">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Возраст до</label>
+                            <input type="number" class="form-input" name="ageTo" max="80" placeholder="50">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Город</label>
+                            <input type="text" class="form-input" name="city" placeholder="Любой город">
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="fas fa-search"></i> Найти
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div id="searchResults" style="display: none;">
+                <h3 style="margin-top: 2rem; color: #8b4513;">Результаты поиска</h3>
+                <div class="profiles-grid" id="searchResultsGrid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Вход в систему</h2>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required id="loginEmail" placeholder="example@mail.ru">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-input" required id="loginPassword" placeholder="Введите пароль">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Регистрация</h2>
+                <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            <form onsubmit="register(event)">
+                <div class="form-group">
+                    <label class="form-label">Имя</label>
+                    <input type="text" class="form-input" required id="registerName" placeholder="Ваше имя">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required id="registerEmail" placeholder="example@mail.ru">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-input" required id="registerPassword" placeholder="Минимум 6 символов">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-user-plus"></i> Зарегистрироваться
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Detail Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="profileModalName">Профиль</h2>
+                <button class="modal-close" onclick="closeModal('profileModal')">&times;</button>
+            </div>
+            <div id="profileModalContent"></div>
+            <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center;">
+                <button class="btn btn-primary" onclick="sendMessageToProfile()">
+                    <i class="fas fa-envelope"></i> Написать
+                </button>
+                <button class="btn btn-secondary" onclick="addProfileToFavorites()">
+                    <i class="fas fa-heart"></i> В избранное
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let currentUser = null;
+        let profiles = [];
+        let favorites = [];
+        let currentProfileId = null;
+        let messages = [];
+
+        // Initialize profiles
+        function initializeProfiles() {
+            profiles = [
+                {
+                    id: 1, name: 'Мария', age: 28, city: 'Москва', avatar: 'М', gender: 'female',
+                    churchStatus: 'воцерковленная', maritalStatus: 'не замужем', online: true,
+                    quote: 'Ищу верующего человека для создания крепкой православной семьи',
+                    about: 'Преподаю в воскресной школе, люблю паломничества по святым местам.',
+                    interests: ['паломничество', 'церковное пение', 'чтение'], education: 'высшее', profession: 'Преподаватель'
+                },
+                {
+                    id: 2, name: 'Александр', age: 32, city: 'Санкт-Петербург', avatar: 'А', gender: 'male',
+                    churchStatus: 'воцерковленный', maritalStatus: 'холост', online: true,
+                    quote: 'Воцерковленный христианин, ищу спутницу жизни для совместного пути к Богу',
+                    about: 'Служу в алтаре, участвую в приходской жизни.',
+                    interests: ['богословие', 'благотворительность', 'чтение'], education: 'высшее', profession: 'Инженер'
+                },
+                {
+                    id: 3, name: 'Елена', age: 26, city: 'Екатеринбург', avatar: 'Е', gender: 'female',
+                    churchStatus: 'неофит', maritalStatus: 'не замужем', online: false,
+                    quote: 'Недавно пришла к вере, ищу человека для духовного роста',
+                    about: 'Два года назад крестилась, активно изучаю Православие.',
+                    interests: ['богословие', 'природа', 'чтение'], education: 'среднее специальное', profession: 'Медсестра'
+                }
+            ];
+        }
+
+        // Create profile card
+        function createProfileCard(profile) {
+            const interestTags = profile.interests.map(interest => `<span class="interest-tag">${interest}</span>`).join('');
+            const statusClass = profile.online ? 'online' : '';
+            const statusText = profile.online ? 'Онлайн' : 'Был(а) недавно';
+            
+            return `
+                <div class="profile-card" onclick="showProfile(${profile.id})">
+                    <div class="profile-photo">
+                        ${profile.avatar}
+                        <div class="profile-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="profile-content">
+                        <div class="profile-name">${profile.name}, <span class="profile-age">${profile.age} лет</span></div>
+                        <div class="profile-location"><i class="fas fa-map-marker-alt"></i> ${profile.city}</div>
+                        <div class="profile-quote">"${profile.quote}"</div>
+                        <div class="profile-interests">${interestTags}</div>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary btn-small" onclick="handleMessage(event, ${profile.id})">
+                                <i class="fas fa-envelope"></i> Написать
+                            </button>
+                            <button class="btn btn-secondary btn-small" onclick="handleFavorite(event, ${profile.id})">
+                                <i class="fas fa-heart"></i> В избранное
+                            </button>
+                        </div>
+                        <div class="share-buttons">
+                            <a href="javascript:void(0)" class="share-btn vk" onclick="shareProfile(event, ${profile.id}, 'vk')">
+                                <i class="fab fa-vk"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="share-btn telegram" onclick="shareProfile(event, ${profile.id}, 'telegram')">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="share-btn whatsapp" onclick="shareProfile(event, ${profile.id}, 'whatsapp')">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load profiles
+        function loadProfiles() {
+            const grid = document.getElementById('profilesGrid');
+            if (grid) {
+                grid.innerHTML = profiles.map(profile => createProfileCard(profile)).join('');
+            }
+        }
+
+        // Show section
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+                document.querySelectorAll('.nav a').forEach(link => link.classList.remove('active'));
+                const navLinks = document.querySelectorAll('.nav a');
+                navLinks.forEach(link => {
+                    if (link.textContent.toLowerCase().includes(getNavText(sectionId))) {
+                        link.classList.add('active');
+                    }
+                });
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function getNavText(sectionId) {
+            const navMap = {'home': 'главная', 'profiles': 'анкеты', 'search': 'поиск', 'gallery': 'фотогалерея', 'events': 'мероприятия', 'blog': 'блог', 'about': 'о нас'};
+            return navMap[sectionId] || '';
+        }
+
+        // Show profile details
+        function showProfile(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+            
+            currentProfileId = profileId;
+            const modalName = document.getElementById('profileModalName');
+            const modalContent = document.getElementById('profileModalContent');
+            
+            if (modalName) modalName.textContent = `${profile.name}, ${profile.age} лет`;
+            if (modalContent) {
+                modalContent.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="profile-photo" style="width: 120px; height: 120px; font-size: 3rem; margin: 0 auto; border-radius: 8px;">
+                            ${profile.avatar}
+                        </div>
+                        ${profile.online ? '<p style="color: #27ae60; margin-top: 1rem;"><i class="fas fa-circle"></i> Сейчас онлайн</p>' : '<p style="color: #666; margin-top: 1rem;">Был(а) в сети недавно</p>'}
+                    </div>
+                    <div style="margin-bottom: 1rem;"><strong>Город:</strong> ${profile.city}</div>
+                    <div style="margin-bottom: 1rem;"><strong>Воцерковленность:</strong> ${profile.churchStatus}</div>
+                    <div style="margin-bottom: 1rem;"><strong>Семейное положение:</strong> ${profile.maritalStatus}</div>
+                    <div style="margin-bottom: 1rem;"><strong>Образование:</strong> ${profile.education}</div>
+                    <div style="margin-bottom: 1rem;"><strong>Профессия:</strong> ${profile.profession}</div>
+                    <div style="margin-bottom: 1rem;"><strong>О себе:</strong><p style="margin-top: 0.5rem;">${profile.about}</p></div>
+                    <div style="margin-bottom: 1rem;"><strong>Интересы:</strong>
+                        <div class="profile-interests" style="margin-top: 0.5rem;">
+                            ${profile.interests.map(interest => `<span class="interest-tag">${interest}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            showModal('profileModal');
+        }
+
+        // Chat functions
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            if (!input.value.trim()) return;
+            
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message message-sent';
+            messageDiv.innerHTML = `
+                <div class="message-bubble">${input.value}</div>
+                <div class="message-time">${new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'})}</div>
+            `;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            input.value = '';
+            
+            // Simulate response
+            setTimeout(() => {
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'chat-message message-received';
+                responseDiv.innerHTML = `
+                    <div class="message-bubble">Спасибо за сообщение! Очень приятно общаться.</div>
+                    <div class="message-time">${new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'})}</div>
+                `;
+                messagesContainer.appendChild(responseDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 2000);
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Handle functions
+        function handleMessage(event, profileId) {
+            event.stopPropagation();
+            if (!currentUser) {
+                showNotification('Для отправки сообщений необходимо войти в систему', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            showNotification('Переход в чат...');
+            showSection('messages');
+        }
+
+        function handleFavorite(event, profileId) {
+            event.stopPropagation();
+            if (!currentUser) {
+                showNotification('Для добавления в избранное необходимо войти в систему', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            
+            const profile = profiles.find(p => p.id === profileId);
+            if (favorites.includes(profileId)) {
+                favorites = favorites.filter(id => id !== profileId);
+                showNotification(`${profile ? profile.name : 'Анкета'} удалена из избранного`);
+            } else {
+                favorites.push(profileId);
+                showNotification(`${profile ? profile.name : 'Анкета'} добавлена в избранное`);
+            }
+        }
+
+        function handleCreateProfile() {
+            if (!currentUser) {
+                showNotification('Для создания анкеты необходимо войти в систему', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            showNotification('Функция создания анкеты будет доступна в полной версии', 'info');
+        }
+
+        function shareProfile(event, profileId, platform) {
+            event.stopPropagation();
+            const profile = profiles.find(p => p.id === profileId);
+            if (!profile) return;
+
+            const url = `${window.location.origin}?profile=${profileId}`;
+            const text = `Познакомьтесь с ${profile.name} на сайте православных знакомств "Спаси и Сохрани"`;
+
+            switch(platform) {
+                case 'vk':
+                    window.open(`https://vk.com/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(text)}`);
+                    break;
+                case 'telegram':
+                    window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+                    break;
+                case 'whatsapp':
+                    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`);
+                    break;
+            }
+            showNotification(`Профиль ${profile.name} поделён в социальной сети!`);
+        }
+
+        function sendMessageToProfile() {
+            if (!currentUser) {
+                closeModal('profileModal');
+                showModal('loginModal');
+                return;
+            }
+            closeModal('profileModal');
+            showNotification('Переход в чат...');
+            showSection('messages');
+        }
+
+        function addProfileToFavorites() {
+            if (!currentUser) {
+                closeModal('profileModal');
+                showModal('loginModal');
+                return;
+            }
+            
+            if (currentProfileId && !favorites.includes(currentProfileId)) {
+                favorites.push(currentProfileId);
+                const profile = profiles.find(p => p.id === currentProfileId);
+                showNotification(`${profile ? profile.name : 'Анкета'} добавлена в избранное`);
+            } else if (favorites.includes(currentProfileId)) {
+                showNotification('Анкета уже в избранном');
+            }
+        }
+
+        function loadMoreProfiles() {
+            showNotification('Загружаем дополнительные анкеты...', 'info');
+            setTimeout(() => {
+                const moreProfiles = [{
+                    id: profiles.length + 1, name: 'Ольга', age: 29, city: 'Ростов-на-Дону', avatar: 'О', gender: 'female',
+                    churchStatus: 'воцерковленная', maritalStatus: 'не замужем', online: false,
+                    quote: 'Ищу православного мужчину для создания семьи в вере',
+                    about: 'Работаю в православной гимназии, веду благотворительные проекты.',
+                    interests: ['благотворительность', 'чтение', 'природа'], education: 'высшее', profession: 'Педагог'
+                }];
+                
+                profiles.push(...moreProfiles);
+                const grid = document.getElementById('profilesGrid');
+                if (grid) {
+                    grid.innerHTML += moreProfiles.map(profile => createProfileCard(profile)).join('');
+                }
+                showNotification('Загружены новые анкеты');
+            }, 1000);
+        }
+
+        function performSearch(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const searchParams = Object.fromEntries(formData);
+            let results = [...profiles];
+            
+            if (searchParams.gender) results = results.filter(p => p.gender === searchParams.gender);
+            if (searchParams.ageFrom) results = results.filter(p => p.age >= parseInt(searchParams.ageFrom));
+            if (searchParams.ageTo) results = results.filter(p => p.age <= parseInt(searchParams.ageTo));
+            if (searchParams.city) results = results.filter(p => p.city.toLowerCase().includes(searchParams.city.toLowerCase()));
+            
+            const resultsGrid = document.getElementById('searchResultsGrid');
+            const searchResults = document.getElementById('searchResults');
+            
+            if (resultsGrid && searchResults) {
+                if (results.length === 0) {
+                    resultsGrid.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">По вашим критериям анкеты не найдены.</p>';
+                } else {
+                    resultsGrid.innerHTML = results.map(profile => createProfileCard(profile)).join('');
+                }
+                searchResults.style.display = 'block';
+                showNotification(`Найдено анкет: ${results.length}`);
+                searchResults.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) userMenu.classList.toggle('active');
+        }
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.style.display = 'none';
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (email && password) {
+                currentUser = { name: email.split('@')[0], email: email, avatar: email[0].toUpperCase() };
+                updateAuthUI();
+                closeModal('loginModal');
+                showNotification('Добро пожаловать! Вход выполнен успешно!');
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            }
+        }
+
+        function register(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (name && email && password) {
+                currentUser = { name: name, email: email, avatar: name[0].toUpperCase() };
+                updateAuthUI();
+                closeModal('registerModal');
+                showNotification(`Добро пожаловать, ${name}! Регистрация успешна!`);
+                document.getElementById('registerName').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+            }
+        }
+
+        function updateAuthUI() {
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+            const messagesCount = document.getElementById('messagesCount');
+            
+            if (currentUser) {
+                if (authButtons) authButtons.style.display = 'none';
+                if (userInfo) userInfo.style.display = 'flex';
+                if (userName) userName.textContent = currentUser.name;
+                if (userAvatar) userAvatar.textContent = currentUser.avatar;
+                if (messagesCount) messagesCount.textContent = '3';
+            } else {
+                if (authButtons) authButtons.style.display = 'flex';
+                if (userInfo) userInfo.style.display = 'none';
+                if (messagesCount) messagesCount.textContent = '0';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            favorites = [];
+            updateAuthUI();
+            showNotification('Вы вышли из системы. До свидания!');
+            showSection('home');
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) userMenu.classList.remove('active');
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 4000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeProfiles();
+            loadProfiles();
+            
+            // Event listeners
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#userAvatar') && !e.target.closest('#userMenu')) {
+                    const userMenu = document.getElementById('userMenu');
+                    if (userMenu) userMenu.classList.remove('active');
+                }
+            });
+
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        if (modal.style.display === 'block') {
+                            modal.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
