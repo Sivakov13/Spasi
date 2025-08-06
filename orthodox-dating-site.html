@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спаси и Сохрани - Православные знакомства</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #764ba2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: #667eea;
+        }
+
+        .logo i {
+            color: #667eea;
+            font-size: 2rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #667eea; }
+            to { text-shadow: 0 0 20px #667eea, 0 0 30px #667eea; }
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #764ba2;
+            border: 2px solid #764ba2;
+        }
+
+        .btn-secondary:hover {
+            background: #764ba2;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(118, 75, 162, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 90px;
+            min-height: calc(100vh - 90px);
+        }
+
+        .section {
+            display: none;
+            padding: 3rem 0;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 5rem 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 35px;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(31, 38, 135, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Search Container */
+        .search-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Profiles Grid */
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(31, 38, 135, 0.3);
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-photo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.8s;
+        }
+
+        .profile-card:hover .profile-photo::before {
+            left: 100%;
+        }
+
+        .profile-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .profile-status.online {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .compatibility-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #f39c12, #f1c40f);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        .profile-content {
+            padding: 2rem;
+        }
+
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.8rem;
+        }
+
+        .profile-info {
+            color: #666;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .profile-quote {
+            font-style: italic;
+            color: #555;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .profile-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .interest-tag {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-small {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+            border-radius: 20px;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .chat-user-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        }
+
+        .message {
+            margin-bottom: 1.2rem;
+            animation: messageSlideIn 0.3s ease-out;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-bubble {
+            max-width: 75%;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .message-sent {
+            text-align: right;
+        }
+
+        .message-sent .message-bubble {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin-left: auto;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .message-received .message-bubble {
+            background: white;
+            color: #333;
+            border: 1px solid #e1e1e1;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-input-container {
+            padding: 1.5rem;
+            background: white;
+            border-top: 1px solid #e1e1e1;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .chat-send {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .chat-send:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 25px;
+            padding: 0;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            animation: modalSlideIn 0.4s ease-out;
+            overflow: hidden;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2.5rem;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 120px;
+            right: 30px;
+            background: white;
+            padding: 1.2rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-left: 5px solid #27ae60;
+            display: none;
+            z-index: 3000;
+            animation: notificationSlideIn 0.4s ease-out;
+            max-width: 350px;
+        }
+
+        @keyframes notificationSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(31, 38, 135, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .profiles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filters {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Blog Posts */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .blog-post {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(31, 38, 135, 0.3);
+        }
+
+        .blog-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .blog-content {
+            padding: 2rem;
+        }
+
+        .blog-meta {
+            color: #667eea;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .blog-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .blog-author {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .blog-read-time {
+            color: #999;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo" onclick="showSection('home')">
+                <i class="fas fa-cross"></i>
+                <span>Спаси и Сохрани</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-link active" onclick="showSection('home')">
+                    <i class="fas fa-home"></i> Главная
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('profiles')">
+                    <i class="fas fa-users"></i> Анкеты
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('messages')">
+                    <i class="fas fa-comments"></i> Сообщения
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('favorites')">
+                    <i class="fas fa-heart"></i> Избранное
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('blog')">
+                    <i class="fas fa-book"></i> Блог
+                </a>
+            </nav>
+            
+            <div class="auth-buttons">
+                <button class="btn btn-secondary" onclick="openModal('loginModal')">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+                <button class="btn btn-primary" onclick="openModal('registerModal')">
+                    <i class="fas fa-user-plus"></i> Регистрация
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <div class="hero">
+                    <h1>Найдите свою вторую половинку в вере</h1>
+                    <p>Современная православная платформа знакомств с умным алгоритмом совместимости для создания крепких семей, основанных на духовных ценностях</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-large" onclick="openModal('registerModal')">
+                            <i class="fas fa-heart"></i> Начать поиск любви
+                        </button>
+                        <button class="btn btn-secondary btn-large" onclick="showSection('profiles')">
+                            <i class="fas fa-search"></i> Посмотреть анкеты
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">2,847</div>
+                        <div class="stat-label">Активных пользователей</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">456</div>
+                        <div class="stat-label">Счастливых пар</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">189</div>
+                        <div class="stat-label">Венчаний</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Довольных пользователей</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="feature-title">Безопасность и проверка</div>
+                        <div class="feature-description">Все анкеты проходят тщательную модерацию. Ваши данные защищены современными технологиями шифрования.</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="feature-title">Умный алгоритм совместимости</div>
+                        <div class="feature-description">Интеллектуальная система подбора на основе духовных ценностей, интересов и жизненных целей.</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-pray"></i>
+                        </div>
+                        <div class="feature-title">Духовные ценности</div>
+                        <div class="feature-description">Платформа создана специально для верующих людей, стремящихся к созданию православной семьи.</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="feature-title">Удобное общение</div>
+                        <div class="feature-description">Современный чат с возможностью обмена сообщениями, фото и голосовыми записями.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profiles Section -->
+            <section id="profiles" class="section">
+                <div class="content-card">
+                    <h2 class="section-title">Анкеты пользователей</h2>
+                    
+                    <div class="search-container">
+                        <div class="search-filters">
+                            <div class="form-group">
+                                <label class="form-label">Я ищу</label>
+                                <select class="form-input" id="genderFilter">
+                                    <option value="">Любой пол</option>
+                                    <option value="male">Мужчину</option>
+                                    <option value="female">Женщину</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Возраст от</label>
+                                <input type="number" class="form-input" id="ageFromFilter" min="18" max="80" placeholder="18">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Возраст до</label>
+                                <input type="number" class="form-input" id="ageToFilter" min="18" max="80" placeholder="50">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Город</label>
+                                <input type="text" class="form-input" id="cityFilter" placeholder="Введите город">
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <button class="btn btn-primary btn-large" onclick="searchProfiles()">
+                                <i class="fas fa-search"></i> Найти совпадения
+                            </button>
+                            <button class="btn btn-secondary" onclick="clearFilters()">
+                                <i class="fas fa-eraser"></i> Очистить фильтры
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="profiles-grid" id="profilesGrid">
+                        <!-- Profiles will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messages" class="section">
+                <div class="content-card">
+                    <h2 class="section-title">Сообщения</h2>
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <div class="chat-user-avatar">М</div>
+                            <div>
+                                <div style="font-weight: bold; font-size: 1.1rem;">Мария Петрова</div>
+                                <div style="font-size: 0.9rem; opacity: 0.8;">
+                                    <i class="fas fa-circle" style="color: #2ecc71; font-size: 0.7rem;"></i> Онлайн
+                                </div>
+                            </div>
+                            <div style="margin-left: auto;">
+                                <button class="btn btn-secondary btn-small" style="background: rgba(255,255,255,0.2); border: none; color: white;">
+                                    <i class="fas fa-video"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message message-received">
+                                <div class="message-bubble">Здравствуйте! Меня очень заинтересовала ваша анкета. Вы действительно воцерковленный человек?</div>
+                            </div>
+                            <div class="message message-sent">
+                                <div class="message-bubble">Здравствуйте! Да, конечно. Очень приятно познакомиться с вами.</div>
+                            </div>
+                            <div class="message message-received">
+                                <div class="message-bubble">Расскажите немного о себе. Как давно вы пришли к вере?</div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" class="chat-input" id="messageInput" placeholder="Введите сообщение..." onkeypress="handleEnterKey(event)">
+                            <button class="chat-send" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Favorites Section -->
+            <section id="favorites" class="section">
+                <div class="content-card">
+                    <h2 class="section-title">Избранные анкеты</h2>
+                    <div class="profiles-grid" id="favoritesGrid">
+                        <!-- Favorites will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog Section -->
+            <section id="blog" class="section">
+                <div class="content-card">
+                    <h2 class="section-title">Православный блог</h2>
+                    <div class="blog-grid">
+                        <div class="blog-post" onclick="showNotification('Открываем статью: Как создать православную семью')">
+                            <div class="blog-image">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <span><i class="fas fa-calendar"></i> 15 марта 2024</span>
+                                    <span><i class="fas fa-user"></i> Протоиерей Андрей</span>
+                                </div>
+                                <div class="blog-title">Как создать православную семью в современном мире</div>
+                                <div class="blog-excerpt">О том, какие принципы должны лежать в основе православной семьи и как их применять в повседневной жизни...</div>
+                                <div class="blog-footer">
+                                    <div class="blog-author">Протоиерей Андрей Ткачев</div>
+                                    <div class="blog-read-time"><i class="fas fa-clock"></i> 5 мин</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blog-post" onclick="showNotification('Открываем статью: Православные традиции знакомства')">
+                            <div class="blog-image">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <span><i class="fas fa-calendar"></i> 12 марта 2024</span>
+                                    <span><i class="fas fa-user"></i> Матушка Елена</span>
+                                </div>
+                                <div class="blog-title">Православные традиции знакомства и сватовства</div>
+                                <div class="blog-excerpt">Исторический взгляд на традиции знакомства в православной культуре и их современная актуальность...</div>
+                                <div class="blog-footer">
+                                    <div class="blog-author">Матушка Елена Морозова</div>
+                                    <div class="blog-read-time"><i class="fas fa-clock"></i> 7 мин</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blog-post" onclick="showNotification('Открываем статью: Молитва в семейной жизни')">
+                            <div class="blog-image">
+                                <i class="fas fa-pray"></i>
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <span><i class="fas fa-calendar"></i> 10 марта 2024</span>
+                                    <span><i class="fas fa-user"></i> Иерей Димитрий</span>
+                                </div>
+                                <div class="blog-title">Молитва в семейной жизни</div>
+                                <div class="blog-excerpt">О важности совместной молитвы супругов и воспитании детей в православной вере...</div>
+                                <div class="blog-footer">
+                                    <div class="blog-author">Иерей Димитрий Смирнов</div>
+                                    <div class="blog-read-time"><i class="fas fa-clock"></i> 4 мин</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Вход в систему</h2>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" required id="loginEmail" placeholder="example@mail.ru">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" class="form-input" required id="loginPassword" placeholder="Введите пароль">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-sign-in-alt"></i> Войти в систему
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Регистрация</h2>
+                <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label class="form-label">Имя</label>
+                        <input type="text" class="form-input" required id="registerName" placeholder="Ваше имя">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" required id="registerEmail" placeholder="example@mail.ru">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" class="form-input" required id="registerPassword" placeholder="Минимум 6 символов">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-user-plus"></i> Создать аккаунт
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Sample profiles data
+        const profiles = [
+            {
+                id: 1,
+                name: 'Мария',
+                age: 28,
+                city: 'Москва',
+                avatar: 'М',
+                gender: 'female',
+                status: 'online',
+                compatibility: 95,
+                interests: ['паломничество', 'церковное пение', 'чтение'],
+                quote: 'Ищу верующего человека для создания крепкой православной семьи, основанной на любви и взаимном уважении.'
+            },
+            {
+                id: 2,
+                name: 'Александр',
+                age: 32,
+                city: 'Санкт-Петербург',
+                avatar: 'А',
+                gender: 'male',
+                status: 'online',
+                compatibility: 88,
+                interests: ['богословие', 'благотворительность', 'спорт'],
+                quote: 'Воцерковленный христианин, ищу спутницу жизни для совместного пути к Богу.'
+            },
+            {
+                id: 3,
+                name: 'Елена',
+                age: 26,
+                city: 'Екатеринбург',
+                avatar: 'Е',
+                gender: 'female',
+                status: 'offline',
+                compatibility: 92,
+                interests: ['богословие', 'природа', 'искусство'],
+                quote: 'Недавно пришла к вере, ищу человека для духовного роста и создания семьи.'
+            },
+            {
+                id: 4,
+                name: 'Дмитрий',
+                age: 29,
+                city: 'Казань',
+                avatar: 'Д',
+                gender: 'male',
+                status: 'online',
+                compatibility: 90,
+                interests: ['церковное пение', 'паломничество', 'музыка'],
+                quote: 'Служу в алтаре, ищу православную девушку для создания крепкой семьи.'
+            },
+            {
+                id: 5,
+                name: 'Анна',
+                age: 24,
+                city: 'Новосибирск',
+                avatar: 'А',
+                gender: 'female',
+                status: 'online',
+                compatibility: 87,
+                interests: ['рукоделие', 'кулинария', 'дети'],
+                quote: 'Преподаю в воскресной школе, мечтаю о большой православной семье.'
+            }
+        ];
+
+        let currentUser = null;
+        let favoriteProfiles = [1, 3]; // Sample favorites
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            const activeLink = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            // Load section-specific content
+            if (sectionId === 'profiles') {
+                loadProfiles();
+            } else if (sectionId === 'favorites') {
+                loadFavorites();
+            }
+
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Profile functions
+        function loadProfiles() {
+            const grid = document.getElementById('profilesGrid');
+            if (!grid) return;
+
+            grid.innerHTML = profiles.map(profile => createProfileCard(profile)).join('');
+        }
+
+        function createProfileCard(profile) {
+            const statusClass = profile.status === 'online' ? 'online' : '';
+            const statusText = profile.status === 'online' ? 'Онлайн' : 'Был(а) недавно';
+            const interestTags = profile.interests.map(interest => 
+                `<span class="interest-tag">${interest}</span>`
+            ).join('');
+
+            return `
+                <div class="profile-card">
+                    <div class="profile-photo">
+                        ${profile.avatar}
+                        <div class="profile-status ${statusClass}">${statusText}</div>
+                        <div class="compatibility-badge">${profile.compatibility}% совместимость</div>
+                    </div>
+                    <div class="profile-content">
+                        <div class="profile-name">${profile.name}, ${profile.age} лет</div>
+                        <div class="profile-info">
+                            <i class="fas fa-map-marker-alt"></i> ${profile.city}<br>
+                            <i class="fas fa-church"></i> Воцерковленный
+                        </div>
+                        <div class="profile-quote">"${profile.quote}"</div>
+                        <div class="profile-interests">${interestTags}</div>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary btn-small" onclick="startChat(${profile.id})">
+                                <i class="fas fa-envelope"></i> Написать
+                            </button>
+                            <button class="btn btn-secondary btn-small" onclick="toggleFavorite(${profile.id})">
+                                <i class="fas fa-heart"></i> ${favoriteProfiles.includes(profile.id) ? 'Убрать' : 'В избранное'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Search functions
+        function searchProfiles() {
+            const gender = document.getElementById('genderFilter').value;
+            const ageFrom = document.getElementById('ageFromFilter').value;
+            const ageTo = document.getElementById('ageToFilter').value;
+            const city = document.getElementById('cityFilter').value;
+
+            let results = [...profiles];
+
+            if (gender) {
+                results = results.filter(p => p.gender === gender);
+            }
+            if (ageFrom) {
+                results = results.filter(p => p.age >= parseInt(ageFrom));
+            }
+            if (ageTo) {
+                results = results.filter(p => p.age <= parseInt(ageTo));
+            }
+            if (city) {
+                results = results.filter(p => p.city.toLowerCase().includes(city.toLowerCase()));
+            }
+
+            const grid = document.getElementById('profilesGrid');
+            if (grid) {
+                grid.innerHTML = results.map(profile => createProfileCard(profile)).join('');
+            }
+
+            showNotification(`Найдено анкет: ${results.length}`, 'info');
+        }
+
+        function clearFilters() {
+            document.getElementById('genderFilter').value = '';
+            document.getElementById('ageFromFilter').value = '';
+            document.getElementById('ageToFilter').value = '';
+            document.getElementById('cityFilter').value = '';
+            loadProfiles();
+            showNotification('Фильтры очищены', 'success');
+        }
+
+        // Favorites
+        function toggleFavorite(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            if (favoriteProfiles.includes(profileId)) {
+                favoriteProfiles = favoriteProfiles.filter(id => id !== profileId);
+                showNotification(`${profile.name} удален(а) из избранного`, 'info');
+            } else {
+                favoriteProfiles.push(profileId);
+                showNotification(`${profile.name} добавлен(а) в избранное`, 'success');
+            }
+            
+            // Reload current section if it's profiles or favorites
+            const currentSection = document.querySelector('.section.active');
+            if (currentSection.id === 'profiles') {
+                loadProfiles();
+            } else if (currentSection.id === 'favorites') {
+                loadFavorites();
+            }
+        }
+
+        function loadFavorites() {
+            const grid = document.getElementById('favoritesGrid');
+            if (!grid) return;
+
+            const favoriteProfilesData = profiles.filter(p => favoriteProfiles.includes(p.id));
+            
+            if (favoriteProfilesData.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">
+                        <i class="fas fa-heart" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                        <h3>Пока нет избранных анкет</h3>
+                        <p>Добавляйте понравившиеся профили в избранное</p>
+                        <button class="btn btn-primary" onclick="showSection('profiles')" style="margin-top: 1rem;">
+                            <i class="fas fa-search"></i> Найти анкеты
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = favoriteProfilesData.map(profile => createProfileCard(profile)).join('');
+        }
+
+        // Chat functions
+        function startChat(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            showNotification(`Открываем чат с ${profile.name}...`, 'info');
+            setTimeout(() => {
+                showSection('messages');
+            }, 1500);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            if (!input || !input.value.trim()) return;
+
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message message-sent';
+            messageDiv.innerHTML = `<div class="message-bubble">${input.value}</div>`;
+            messagesContainer.appendChild(messageDiv);
+            
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Simulate typing indicator
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message message-received';
+            typingDiv.innerHTML = `<div class="message-bubble" style="opacity: 0.7;"><i class="fas fa-ellipsis-h"></i> печатает...</div>`;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Simulate response
+            setTimeout(() => {
+                messagesContainer.removeChild(typingDiv);
+                const responses = [
+                    'Спасибо за сообщение! Очень приятно общаться.',
+                    'Интересная мысль. А что вы думаете о современной церковной жизни?',
+                    'Согласна с вами. Важно найти человека с похожими взглядами.',
+                    'Расскажите больше о своих интересах.',
+                    'Очень рада нашему знакомству!'
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'message message-received';
+                responseDiv.innerHTML = `<div class="message-bubble">${randomResponse}</div>`;
+                messagesContainer.appendChild(responseDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 2000);
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Auth functions
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (email && password) {
+                currentUser = { name: email.split('@')[0], email: email };
+                closeModal('loginModal');
+                showNotification('Добро пожаловать! Вход выполнен успешно!', 'success');
+                
+                // Clear form
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            }
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (name && email && password) {
+                currentUser = { name: name, email: email };
+                closeModal('registerModal');
+                showNotification(`Добро пожаловать, ${name}! Регистрация успешна!`, 'success');
+                
+                // Clear form
+                document.getElementById('registerName').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+            }
+        }
+
+        // Notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+
+            // Set border color based on type
+            const colors = {
+                'success': '#27ae60',
+                'error': '#e74c3c',
+                'warning': '#f39c12',
+                'info': '#3498db'
+            };
+
+            notification.textContent = message;
+            notification.style.borderLeftColor = colors[type] || colors.success;
+            notification.style.display = 'block';
+            
+            // Auto hide after 4 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 4000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial content
+            loadProfiles();
+            
+            // Close modals on outside click
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    closeModal(e.target.id);
+                }
+            });
+
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification('Добро пожаловать на православную платформу знакомств!', 'info');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
