@@ -107,6 +107,30 @@
         .chat-input input { flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 20px; margin-right: 0.5rem; }
         .chat-input button { border-radius: 50%; width: 40px; height: 40px; padding: 0; }
 
+        /* Settings */
+        .settings-menu { display: flex; flex-direction: column; gap: 0.5rem; }
+        .settings-link { display: block; padding: 1rem; color: #2c3e50; text-decoration: none; transition: all 0.3s; border-radius: 6px; border-left: 3px solid transparent; }
+        .settings-link:hover { background: #f8f9fa; border-left-color: #d4af37; }
+        .settings-link.active { background: #f8f9fa; border-left-color: #8b4513; color: #8b4513; font-weight: 500; }
+        .settings-tab { display: none; }
+        .settings-tab.active { display: block; }
+        
+        /* Photo Gallery */
+        .photo-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+        .photo-item { position: relative; background: linear-gradient(135deg, #d4af37, #f4e4a6); height: 200px; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+        .photo-item:hover { transform: translateY(-3px); }
+        .photo-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: white; padding: 1rem; }
+        
+        /* Events & Blog Cards */
+        .event-card, .blog-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: transform 0.3s; cursor: pointer; }
+        .event-card:hover, .blog-card:hover { transform: translateY(-3px); }
+        .event-image, .blog-image { width: 100%; height: 200px; background: linear-gradient(135deg, #d4af37, #f4e4a6); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; }
+        .event-content, .blog-content { padding: 1.5rem; }
+        .event-date, .blog-date { color: #8b4513; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .event-title, .blog-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; color: #2c3e50; }
+        .event-description, .blog-excerpt { color: #666; margin-bottom: 1rem; }
+        .event-location { color: #8b4513; font-size: 0.9rem; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; flex-direction: column; padding: 1rem; box-shadow: 0 5px 10px rgba(0,0,0,0.1); border-top: 1px solid #d4af37; }
@@ -114,6 +138,7 @@
             .hero h1 { font-size: 2.2rem; }
             .stats { grid-template-columns: repeat(2, 1fr); }
             .hero-buttons { flex-direction: column; align-items: center; }
+            .settings-menu { flex-direction: row; overflow-x: auto; }
         }
     </style>
 </head>
@@ -243,6 +268,362 @@
         </div>
     </section>
 
+    <!-- Cabinet Section -->
+    <section id="cabinet" class="section">
+        <div class="container">
+            <h2 class="section-title">Мой кабинет</h2>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top: 2rem;">
+                <!-- User Profile Card -->
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); height: fit-content;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="profile-photo" style="width: 120px; height: 120px; font-size: 3rem; margin: 0 auto; border-radius: 8px;">
+                            И
+                        </div>
+                        <h3 style="color: #8b4513; margin-top: 1rem;" id="cabinetUserName">Иван Петров</h3>
+                        <p style="color: #666;">32 года, Москва</p>
+                        <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
+                            <span class="interest-tag">паломничество</span>
+                            <span class="interest-tag">чтение</span>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid #eee; padding-top: 1rem;">
+                        <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;" onclick="editProfile()">
+                            <i class="fas fa-edit"></i> Редактировать профиль
+                        </button>
+                        <button class="btn btn-secondary" style="width: 100%;" onclick="uploadPhoto()">
+                            <i class="fas fa-camera"></i> Загрузить фото
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Cabinet Menu -->
+                <div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="stat-card" onclick="showSection('messages')" style="cursor: pointer;">
+                            <div style="color: #8b4513; font-size: 2rem; margin-bottom: 1rem;"><i class="fas fa-envelope"></i></div>
+                            <div class="stat-number">3</div>
+                            <div>Новых сообщений</div>
+                        </div>
+                        <div class="stat-card" onclick="showSection('favorites')" style="cursor: pointer;">
+                            <div style="color: #8b4513; font-size: 2rem; margin-bottom: 1rem;"><i class="fas fa-heart"></i></div>
+                            <div class="stat-number" id="favoritesCount">0</div>
+                            <div>В избранном</div>
+                        </div>
+                        <div class="stat-card" onclick="showProfileViews()" style="cursor: pointer;">
+                            <div style="color: #8b4513; font-size: 2rem; margin-bottom: 1rem;"><i class="fas fa-eye"></i></div>
+                            <div class="stat-number">47</div>
+                            <div>Просмотров профиля</div>
+                        </div>
+                        <div class="stat-card" onclick="showSection('settings')" style="cursor: pointer;">
+                            <div style="color: #8b4513; font-size: 2rem; margin-bottom: 1rem;"><i class="fas fa-cog"></i></div>
+                            <div class="stat-number">⚙️</div>
+                            <div>Настройки</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-top: 2rem;">
+                        <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Последняя активность</h3>
+                        <div style="space-y: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem;">
+                                <i class="fas fa-heart" style="color: #e74c3c;"></i>
+                                <div>
+                                    <div>Мария добавила вас в избранное</div>
+                                    <div style="color: #666; font-size: 0.9rem;">2 часа назад</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 1rem;">
+                                <i class="fas fa-envelope" style="color: #3498db;"></i>
+                                <div>
+                                    <div>Новое сообщение от Елена</div>
+                                    <div style="color: #666; font-size: 0.9rem;">5 часов назад</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                                <i class="fas fa-eye" style="color: #27ae60;"></i>
+                                <div>
+                                    <div>Ваш профиль просмотрели 5 раз</div>
+                                    <div style="color: #666; font-size: 0.9rem;">Вчера</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Favorites Section -->
+    <section id="favorites" class="section">
+        <div class="container">
+            <h2 class="section-title">Избранное</h2>
+            <div id="favoritesContent">
+                <div id="favoritesGrid" class="profiles-grid"></div>
+                <div id="emptyFavorites" style="text-align: center; padding: 4rem; color: #666; display: none;">
+                    <i class="fas fa-heart" style="font-size: 4rem; color: #ddd; margin-bottom: 1rem;"></i>
+                    <h3>Избранное пусто</h3>
+                    <p>Добавляйте понравившиеся анкеты в избранное, чтобы не потерять их</p>
+                    <button class="btn btn-primary" onclick="showSection('profiles')" style="margin-top: 1rem;">
+                        <i class="fas fa-search"></i> Смотреть анкеты
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings" class="section">
+        <div class="container">
+            <h2 class="section-title">Настройки</h2>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top: 2rem;">
+                <!-- Settings Menu -->
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); height: fit-content;">
+                    <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Разделы настроек</h3>
+                    <div class="settings-menu">
+                        <a href="javascript:void(0)" onclick="showSettingsTab('profile')" class="settings-link active">
+                            <i class="fas fa-user"></i> Профиль
+                        </a>
+                        <a href="javascript:void(0)" onclick="showSettingsTab('privacy')" class="settings-link">
+                            <i class="fas fa-shield-alt"></i> Приватность
+                        </a>
+                        <a href="javascript:void(0)" onclick="showSettingsTab('notifications')" class="settings-link">
+                            <i class="fas fa-bell"></i> Уведомления
+                        </a>
+                        <a href="javascript:void(0)" onclick="showSettingsTab('account')" class="settings-link">
+                            <i class="fas fa-cog"></i> Аккаунт
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Settings Content -->
+                <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                    <!-- Profile Settings -->
+                    <div id="profileSettings" class="settings-tab active">
+                        <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Настройки профиля</h3>
+                        <form onsubmit="saveProfileSettings(event)">
+                            <div class="form-group">
+                                <label class="form-label">Имя</label>
+                                <input type="text" class="form-input" value="Иван Петров" id="settingsName">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Возраст</label>
+                                <input type="number" class="form-input" value="32" id="settingsAge">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Город</label>
+                                <input type="text" class="form-input" value="Москва" id="settingsCity">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">О себе</label>
+                                <textarea class="form-input" rows="4" id="settingsAbout">Православный христианин, ищу спутницу жизни для создания крепкой семьи.</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Сохранить изменения
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Privacy Settings -->
+                    <div id="privacySettings" class="settings-tab">
+                        <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Настройки приватности</h3>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" checked> Показывать мою анкету в поиске
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" checked> Показывать статус "онлайн"
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox"> Скрыть анкету от незарегистрированных пользователей
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Кто может писать мне сообщения</label>
+                            <select class="form-input">
+                                <option>Все пользователи</option>
+                                <option>Только с фото</option>
+                                <option>Только воцерковленные</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="savePrivacySettings()">
+                            <i class="fas fa-save"></i> Сохранить настройки
+                        </button>
+                    </div>
+                    
+                    <!-- Notifications Settings -->
+                    <div id="notificationsSettings" class="settings-tab">
+                        <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Уведомления</h3>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" checked> Новые сообщения
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" checked> Добавление в избранное
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox"> Просмотры профиля
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" checked> Новые анкеты по моим критериям
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveNotificationSettings()">
+                            <i class="fas fa-save"></i> Сохранить настройки
+                        </button>
+                    </div>
+                    
+                    <!-- Account Settings -->
+                    <div id="accountSettings" class="settings-tab">
+                        <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Настройки аккаунта</h3>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" value="ivan@example.com" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Новый пароль</label>
+                            <input type="password" class="form-input" placeholder="Оставьте пустым, если не хотите менять">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Подтвердите новый пароль</label>
+                            <input type="password" class="form-input" placeholder="Повторите новый пароль">
+                        </div>
+                        <div style="border-top: 1px solid #eee; padding-top: 2rem; margin-top: 2rem;">
+                            <button class="btn btn-primary" onclick="changePassword()" style="margin-right: 1rem;">
+                                <i class="fas fa-key"></i> Изменить пароль
+                            </button>
+                            <button class="btn btn-secondary" onclick="deleteAccount()" style="background: #e74c3c; border-color: #e74c3c;">
+                                <i class="fas fa-trash"></i> Удалить аккаунт
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section">
+        <div class="container">
+            <h2 class="section-title">Фотогалерея участников</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                Красивые моменты из жизни наших пользователей
+            </p>
+            <div class="photo-gallery" id="photoGallery">
+                <!-- Photos will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="section">
+        <div class="container">
+            <h2 class="section-title">Православные мероприятия</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                Паломничества, встречи и духовные мероприятия для православных
+            </p>
+            <div id="eventsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <!-- Events will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="section">
+        <div class="container">
+            <h2 class="section-title">Православный блог</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">
+                Статьи о вере, семье и духовной жизни
+            </p>
+            <div id="blogGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <!-- Blog posts will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">О нас</h2>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 2rem;">
+                    <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Наша миссия</h3>
+                    <p style="margin-bottom: 1.5rem;">
+                        "Спаси и Сохрани" - это православная платформа знакомств, созданная для верующих людей, 
+                        которые ищут спутника жизни, разделяющего их духовные ценности и стремление к созданию 
+                        крепкой христианской семьи.
+                    </p>
+                    <p style="margin-bottom: 1.5rem;">
+                        Мы верим, что семья - это малая церковь, основанная на любви, взаимопонимании и общей вере. 
+                        Наша цель - помочь православным христианам найти друг друга и создать счастливые семьи, 
+                        благословленные Богом.
+                    </p>
+                </div>
+                
+                <div style="background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 2rem;">
+                    <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Наши принципы</h3>
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <i class="fas fa-cross" style="color: #d4af37; margin-top: 0.2rem;"></i>
+                            <div>
+                                <strong>Православные ценности</strong>
+                                <p style="margin-top: 0.5rem; color: #666;">Все участники разделяют православную веру и стремятся к духовному росту</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <i class="fas fa-heart" style="color: #d4af37; margin-top: 0.2rem;"></i>
+                            <div>
+                                <strong>Серьёзные отношения</strong>
+                                <p style="margin-top: 0.5rem; color: #666;">Мы помогаем найти спутника жизни для создания семьи, а не для легких знакомств</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <i class="fas fa-shield-alt" style="color: #d4af37; margin-top: 0.2rem;"></i>
+                            <div>
+                                <strong>Безопасность</strong>
+                                <p style="margin-top: 0.5rem; color: #666;">Строгая модерация анкет и защита личных данных пользователей</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: start; gap: 1rem;">
+                            <i class="fas fa-hands-helping" style="color: #d4af37; margin-top: 0.2rem;"></i>
+                            <div>
+                                <strong>Поддержка</strong>
+                                <p style="margin-top: 0.5rem; color: #666;">Помощь на всех этапах знакомства и создания отношений</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                    <h3 style="color: #8b4513; margin-bottom: 1.5rem;">Связаться с нами</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                        <div style="text-align: center;">
+                            <i class="fas fa-envelope" style="color: #d4af37; font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <div>support@spasi-sokhrani.ru</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <i class="fas fa-phone" style="color: #d4af37; font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <div>+7 (800) 123-45-67</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <i class="fas fa-clock" style="color: #d4af37; font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <div>Поддержка 24/7</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Other sections... -->
     <section id="search" class="section">
         <div class="container">
@@ -363,6 +744,9 @@
         let favorites = [];
         let currentProfileId = null;
         let messages = [];
+        let photos = [];
+        let events = [];
+        let blogPosts = [];
 
         // Initialize profiles
         function initializeProfiles() {
@@ -559,6 +943,16 @@
                 favorites.push(profileId);
                 showNotification(`${profile ? profile.name : 'Анкета'} добавлена в избранное`);
             }
+            
+            // Update favorites count
+            const favoritesCount = document.getElementById('favoritesCount');
+            if (favoritesCount) favoritesCount.textContent = favorites.length;
+            
+            // Reload favorites page if currently viewing it
+            const favoritesSection = document.getElementById('favorites');
+            if (favoritesSection && favoritesSection.classList.contains('active')) {
+                loadFavorites();
+            }
         }
 
         function handleCreateProfile() {
@@ -751,10 +1145,264 @@
             setTimeout(() => notification.style.display = 'none', 4000);
         }
 
+        // Initialize data
+        function initializePhotos() {
+            photos = [
+                { id: 1, author: 'Мария', title: 'На паломничестве в Троице-Сергиеву лавру', likes: 15, comments: 3 },
+                { id: 2, author: 'Александр', title: 'Венчание в храме Христа Спасителя', likes: 28, comments: 7 },
+                { id: 3, author: 'Елена', title: 'Крещение в Иордане', likes: 12, comments: 2 },
+                { id: 4, author: 'Михаил', title: 'Служба в алтаре', likes: 9, comments: 1 },
+                { id: 5, author: 'Анна', title: 'Воскресная школа', likes: 18, comments: 4 },
+                { id: 6, author: 'Дмитрий', title: 'Благотворительная акция', likes: 22, comments: 6 }
+            ];
+        }
+
+        function initializeEvents() {
+            events = [
+                {
+                    id: 1, title: 'Паломничество в Оптину пустынь', 
+                    date: '15 марта 2024', location: 'Калужская область',
+                    description: 'Духовное путешествие к святыням Оптиной пустыни с посещением келий старцев',
+                    participants: 24, maxParticipants: 40
+                },
+                {
+                    id: 2, title: 'Встреча православной молодежи', 
+                    date: '22 марта 2024', location: 'Москва, храм Всех Святых',
+                    description: 'Беседа о семейных ценностях и создании православной семьи',
+                    participants: 18, maxParticipants: 30
+                },
+                {
+                    id: 3, title: 'Благотворительный концерт', 
+                    date: '5 апреля 2024', location: 'СПб, Александро-Невская лавра',
+                    description: 'Концерт церковной музыки в поддержку детского православного приюта',
+                    participants: 67, maxParticipants: 100
+                }
+            ];
+        }
+
+        function initializeBlog() {
+            blogPosts = [
+                {
+                    id: 1, title: 'Как создать православную семью в современном мире',
+                    date: '10 марта 2024', author: 'Протоиерей Андрей Ткачев',
+                    excerpt: 'О том, какие принципы должны лежать в основе православной семьи и как их применять в повседневной жизни...',
+                    readTime: '5 мин'
+                },
+                {
+                    id: 2, title: 'Православные традиции знакомства и сватовства',
+                    date: '8 марта 2024', author: 'Матушка Елена Морозова',
+                    excerpt: 'Исторический взгляд на традиции знакомства в православной культуре и их современная актуальность...',
+                    readTime: '7 мин'
+                },
+                {
+                    id: 3, title: 'Молитва в семейной жизни',
+                    date: '5 марта 2024', author: 'Иерей Димитрий Смирнов',
+                    excerpt: 'О важности совместной молитвы супругов и воспитании детей в православной вере...',
+                    readTime: '4 мин'
+                }
+            ];
+        }
+
+        // Load functions
+        function loadPhotoGallery() {
+            const gallery = document.getElementById('photoGallery');
+            if (!gallery) return;
+            
+            gallery.innerHTML = photos.map(photo => `
+                <div class="photo-item" onclick="showPhotoModal(${photo.id})">
+                    <div class="photo-overlay">
+                        <div style="font-weight: bold; margin-bottom: 0.5rem;">${photo.title}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>@${photo.author}</span>
+                            <div>
+                                <i class="fas fa-heart" style="margin-right: 0.5rem;"></i>${photo.likes}
+                                <i class="fas fa-comment" style="margin-left: 1rem; margin-right: 0.5rem;"></i>${photo.comments}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            if (!eventsGrid) return;
+            
+            eventsGrid.innerHTML = events.map(event => `
+                <div class="event-card" onclick="showEventDetails(${event.id})">
+                    <div class="event-image">
+                        <i class="fas fa-church"></i>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-date"><i class="fas fa-calendar"></i> ${event.date}</div>
+                        <div class="event-title">${event.title}</div>
+                        <div class="event-description">${event.description}</div>
+                        <div class="event-location"><i class="fas fa-map-marker-alt"></i> ${event.location}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                            <span style="color: #666;">${event.participants}/${event.maxParticipants} участников</span>
+                            <button class="btn btn-primary btn-small" onclick="joinEvent(event, ${event.id})">
+                                <i class="fas fa-user-plus"></i> Участвовать
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadBlog() {
+            const blogGrid = document.getElementById('blogGrid');
+            if (!blogGrid) return;
+            
+            blogGrid.innerHTML = blogPosts.map(post => `
+                <div class="blog-card" onclick="showBlogPost(${post.id})">
+                    <div class="blog-image">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date"><i class="fas fa-calendar"></i> ${post.date}</div>
+                        <div class="blog-title">${post.title}</div>
+                        <div class="blog-excerpt">${post.excerpt}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                            <span style="color: #8b4513; font-weight: 500;">@${post.author}</span>
+                            <span style="color: #666;"><i class="fas fa-clock"></i> ${post.readTime}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadFavorites() {
+            const favoritesGrid = document.getElementById('favoritesGrid');
+            const emptyFavorites = document.getElementById('emptyFavorites');
+            const favoritesCount = document.getElementById('favoritesCount');
+            
+            if (favoritesCount) favoritesCount.textContent = favorites.length;
+            
+            if (!favoritesGrid || !emptyFavorites) return;
+            
+            if (favorites.length === 0) {
+                favoritesGrid.style.display = 'none';
+                emptyFavorites.style.display = 'block';
+            } else {
+                const favoriteProfiles = profiles.filter(p => favorites.includes(p.id));
+                favoritesGrid.innerHTML = favoriteProfiles.map(profile => createProfileCard(profile)).join('');
+                favoritesGrid.style.display = 'grid';
+                emptyFavorites.style.display = 'none';
+            }
+        }
+
+        // Settings functions
+        function showSettingsTab(tabName) {
+            document.querySelectorAll('.settings-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.settings-link').forEach(link => link.classList.remove('active'));
+            
+            const tab = document.getElementById(tabName + 'Settings');
+            const link = document.querySelector(`[onclick="showSettingsTab('${tabName}')"]`);
+            
+            if (tab) tab.classList.add('active');
+            if (link) link.classList.add('active');
+        }
+
+        function saveProfileSettings(event) {
+            event.preventDefault();
+            showNotification('Настройки профиля сохранены');
+            
+            // Update user info if logged in
+            if (currentUser) {
+                const name = document.getElementById('settingsName').value;
+                const cabinetUserName = document.getElementById('cabinetUserName');
+                const userName = document.getElementById('userName');
+                
+                if (cabinetUserName) cabinetUserName.textContent = name;
+                if (userName) userName.textContent = name.split(' ')[0];
+                currentUser.name = name;
+            }
+        }
+
+        function savePrivacySettings() {
+            showNotification('Настройки приватности сохранены');
+        }
+
+        function saveNotificationSettings() {
+            showNotification('Настройки уведомлений сохранены');
+        }
+
+        function changePassword() {
+            showNotification('Пароль успешно изменен');
+        }
+
+        function deleteAccount() {
+            if (confirm('Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.')) {
+                showNotification('Аккаунт удален', 'error');
+                logout();
+            }
+        }
+
+        // Cabinet functions
+        function editProfile() {
+            showSection('settings');
+            showSettingsTab('profile');
+        }
+
+        function uploadPhoto() {
+            showNotification('Функция загрузки фото будет доступна в полной версии', 'info');
+        }
+
+        function showProfileViews() {
+            showNotification('Показаны просмотры профиля', 'info');
+        }
+
+        // Modal functions
+        function showPhotoModal(photoId) {
+            const photo = photos.find(p => p.id === photoId);
+            if (!photo) return;
+            
+            showNotification(`Просмотр фото: ${photo.title}`);
+        }
+
+        function showEventDetails(eventId) {
+            const event = events.find(e => e.id === eventId);
+            if (!event) return;
+            
+            showNotification(`Подробности: ${event.title}`, 'info');
+        }
+
+        function joinEvent(e, eventId) {
+            e.stopPropagation();
+            if (!currentUser) {
+                showNotification('Для участия в мероприятиях необходимо войти в систему', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            
+            const event = events.find(ev => ev.id === eventId);
+            if (event && event.participants < event.maxParticipants) {
+                event.participants++;
+                loadEvents();
+                showNotification(`Вы записались на мероприятие: ${event.title}`);
+            } else {
+                showNotification('Мест больше нет', 'warning');
+            }
+        }
+
+        function showBlogPost(postId) {
+            const post = blogPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            showNotification(`Читаем: ${post.title}`, 'info');
+        }
+
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             initializeProfiles();
+            initializePhotos();
+            initializeEvents();
+            initializeBlog();
             loadProfiles();
+            loadPhotoGallery();
+            loadEvents();
+            loadBlog();
+            loadFavorites();
             
             // Event listeners
             document.addEventListener('click', function(e) {
