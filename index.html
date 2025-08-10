@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спаси и Сохрани - Православные знакомства</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(233, 30, 99, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e91e63;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav a:hover {
+            color: #e91e63;
+            transform: translateY(-2px);
+        }
+
+        .nav a.active {
+            color: #e91e63;
+        }
+
+        .nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            border-radius: 1px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+        }
+
+        .user-menu {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 1rem;
+            display: none;
+            min-width: 200px;
+            border: 1px solid rgba(233, 30, 99, 0.1);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-menu.active {
+            display: block;
+        }
+
+        .user-menu a {
+            display: block;
+            padding: 0.75rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .user-menu a:hover {
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .user-menu hr {
+            margin: 0.5rem 0;
+            border: none;
+            border-top: 1px solid rgba(233, 30, 99, 0.2);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #e91e63;
+            border: 2px solid #e91e63;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #f44336, #ef5350);
+            color: white;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .action-card {
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 1px solid rgba(233, 30, 99, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .action-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .action-icon {
+            font-size: 3.5rem;
+            color: #e91e63;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover .action-icon {
+            transform: scale(1.1);
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 0;
+            display: none;
+            min-height: 60vh;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            border-radius: 2px;
+        }
+
+        /* Profile Cards */
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(233, 30, 99, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .online-indicator {
+            width: 12px;
+            height: 12px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 0.5rem;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+        }
+
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .profile-age {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .profile-location {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-quote {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            border-left: 4px solid #e91e63;
+        }
+
+        .profile-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .interest-tag {
+            background: linear-gradient(45deg, #e91e63, #ff6b9d);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.3);
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(233, 30, 99, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #e91e63;
+            background: rgba(233, 30, 99, 0.1);
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #e91e63;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideInRight 0.3s ease;
+            z-index: 1001;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, #f44336, #ef5350);
+        }
+
+        .notification.warning {
+            background: linear-gradient(45deg, #ff9800, #ffb74d);
+        }
+
+        .notification.info {
+            background: linear-gradient(45deg, #2196f3, #42a5f5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .profiles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-large {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="showSection('home')">
+                    <i class="fas fa-heart"></i>
+                    <span>Спаси и Сохрани</span>
+                </div>
+                
+                <nav class="nav" id="nav">
+                    <a href="#home" class="active" onclick="showSection('home')">Главная</a>
+                    <a href="#profiles" onclick="showSection('profiles')">Анкеты</a>
+                    <a href="#search" onclick="showSection('search')">Поиск</a>
+                    <a href="#create" onclick="handleCreateProfile()">Создать анкету</a>
+                    <a href="#about" onclick="showSection('about')">О нас</a>
+                </nav>
+                
+                <div class="auth-buttons">
+                    <div id="authButtons">
+                        <button class="btn btn-secondary" onclick="showModal('loginModal')">Войти</button>
+                        <button class="btn btn-primary" onclick="showModal('registerModal')">Регистрация</button>
+                    </div>
+                    
+                    <div id="userInfo" class="user-info">
+                        <span id="userName">Имя</span>
+                        <div class="user-avatar" id="userAvatar" onclick="toggleUserMenu()">И</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Menu Dropdown -->
+        <div id="userMenu" class="user-menu">
+            <a href="#cabinet" onclick="showSection('cabinet')"><i class="fas fa-user"></i> Мой кабинет</a>
+            <a href="#messages" onclick="showSection('messages')"><i class="fas fa-envelope"></i> Сообщения <span class="badge" id="messagesCount">0</span></a>
+            <a href="#favorites" onclick="showSection('favorites')"><i class="fas fa-heart"></i> Избранное</a>
+            <a href="#settings" onclick="showSection('settings')"><i class="fas fa-cog"></i> Настройки</a>
+            <hr>
+            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="container">
+                <h1>Найдите свою вторую половинку в вере</h1>
+                <p>Православная платформа знакомств для создания крепкой семьи</p>
+                
+                <div class="hero-buttons">
+                    <button class="btn btn-secondary btn-large" onclick="handleCreateProfile()">
+                        <i class="fas fa-user-plus"></i> Создать анкету
+                    </button>
+                    <button class="btn btn-primary btn-large" onclick="showSection('profiles')">
+                        <i class="fas fa-search"></i> Смотреть анкеты
+                    </button>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">1,234</div>
+                        <div>Активных анкет</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">156</div>
+                        <div>Счастливых пар</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">89</div>
+                        <div>Венчаний</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24/7</div>
+                        <div>Поддержка</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-actions">
+            <div class="container">
+                <h2 class="section-title">Как это работает?</h2>
+                <div class="actions-grid">
+                    <div class="action-card" onclick="showModal('registerModal')">
+                        <div class="action-icon"><i class="fas fa-user-plus"></i></div>
+                        <h3>Регистрация</h3>
+                        <p>Создайте аккаунт и заполните анкету</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('search')">
+                        <div class="action-icon"><i class="fas fa-search"></i></div>
+                        <h3>Поиск</h3>
+                        <p>Найдите подходящего человека</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('profiles')">
+                        <div class="action-icon"><i class="fas fa-comments"></i></div>
+                        <h3>Общение</h3>
+                        <p>Начните общаться и узнавать друг друга</p>
+                    </div>
+                    <div class="action-card" onclick="showSection('about')">
+                        <div class="action-icon"><i class="fas fa-heart"></i></div>
+                        <h3>Встреча</h3>
+                        <p>Встретьтесь и создайте семью</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profiles Section -->
+    <section id="profiles" class="section">
+        <div class="container">
+            <h2 class="section-title">Рекомендуемые анкеты</h2>
+            
+            <div class="profiles-grid" id="profilesGrid">
+                <!-- Profiles will be loaded here -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="loadMoreProfiles()">
+                    <i class="fas fa-plus"></i> Загрузить ещё
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section id="search" class="section">
+        <div class="container">
+            <h2 class="section-title">Поиск анкет</h2>
+            
+            <div class="search-form">
+                <form id="searchForm" onsubmit="performSearch(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Я ищу</label>
+                            <select class="form-input" name="gender">
+                                <option value="">Любой пол</option>
+                                <option value="male">Мужчину</option>
+                                <option value="female">Женщину</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Возраст от</label>
+                            <input type="number" class="form-input" name="ageFrom" min="18" placeholder="18">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Возраст до</label>
+                            <input type="number" class="form-input" name="ageTo" max="80" placeholder="50">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Город</label>
+                            <input type="text" class="form-input" name="city" placeholder="Любой город">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Воцерковленность</label>
+                            <select class="form-input" name="churchStatus">
+                                <option value="">Любая</option>
+                                <option value="воцерковленный">Воцерковленный</option>
+                                <option value="неофит">Неофит</option>
+                                <option value="прихожу к вере">Прихожу к вере</option>
+                                <option value="ищущий">Ищущий</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Семейное положение</label>
+                            <select class="form-input" name="maritalStatus">
+                                <option value="">Любое</option>
+                                <option value="холост">Холост/Не замужем</option>
+                                <option value="разведен">Разведён(а)</option>
+                                <option value="вдовец">Вдовец/Вдова</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-top: 2rem;">Интересы</h3>
+                    <div class="interests-grid">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="interests" value="паломничество">
+                            Паломничество
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="interests" value="церковное пение">
+                            Церковное пение
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="interests" value="богословие">
+                            Богословие
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="interests" value="благотворительность">
+                            Благотворительность
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="interests" value="чтение">
+                            Чтение
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="interests" value="природа">
+                            Природа
+                        </label>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="fas fa-search"></i> Найти
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div id="searchResults" style="display: none;">
+                <h3 style="margin-top: 2rem;">Результаты поиска</h3>
+                <div class="profiles-grid" id="searchResultsGrid">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Create Profile Section -->
+    <section id="create" class="section">
+        <div class="container">
+            <h2 class="section-title">Создать анкету</h2>
+            
+            <div class="create-form">
+                <div class="form-steps">
+                    <div class="step active" id="step1">1</div>
+                    <div class="step" id="step2">2</div>
+                    <div class="step" id="step3">3</div>
+                </div>
+                
+                <form id="createProfileForm" onsubmit="submitProfile(event)">
+                    <!-- Step 1: Photos -->
+                    <div class="step-content active" id="stepContent1">
+                        <h3>Шаг 1: Загрузите фотографии</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Минимум 1 фото, максимум 6</p>
+                        
+                        <div class="photo-upload">
+                            <div class="photo-slot" onclick="triggerPhotoUpload(0)">
+                                <i class="fas fa-camera"></i>
+                                <span>Главное фото</span>
+                                <button class="remove-photo" onclick="removePhoto(event, 0)">×</button>
+                            </div>
+                            <div class="photo-slot" onclick="triggerPhotoUpload(1)">
+                                <i class="fas fa-plus"></i>
+                                <span>Фото 2</span>
+                                <button class="remove-photo" onclick="removePhoto(event, 1)">×</button>
+                            </div>
+                            <div class="photo-slot" onclick="triggerPhotoUpload(2)">
+                                <i class="fas fa-plus"></i>
+                                <span>Фото 3</span>
+                                <button class="remove-photo" onclick="removePhoto(event, 2)">×</button>
+                            </div>
+                            <div class="photo-slot" onclick="triggerPhotoUpload(3)">
+                                <i class="fas fa-plus"></i>
+                                <span>Фото 4</span>
+                                <button class="remove-photo" onclick="removePhoto(event, 3)">×</button>
+                            </div>
+                            <div class="photo-slot" onclick="triggerPhotoUpload(4)">
+                                <i class="fas fa-plus"></i>
+                                <span>Фото 5</span>
+                                <button class="remove-photo" onclick="removePhoto(event, 4)">×</button>
+                            </div>
+                            <div class="photo-slot" onclick="triggerPhotoUpload(5)">
+                                <i class="fas fa-plus"></i>
+                                <span>Фото 6</span>
+                                <button class="remove-photo" onclick="removePhoto(event, 5)">×</button>
+                            </div>
+                        </div>
+                        
+                        <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="handlePhotoUpload(event)">
+                        
+                        <div style="text-align: right; margin-top: 2rem;">
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                Далее <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Basic Info -->
+                    <div class="step-content" id="stepContent2">
+                        <h3>Шаг 2: Основная информация</h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Имя *</label>
+                                <input type="text" class="form-input" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Возраст *</label>
+                                <input type="number" class="form-input" name="age" min="18" max="80" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Пол *</label>
+                                <select class="form-input" name="gender" required>
+                                    <option value="">Выберите</option>
+                                    <option value="male">Мужской</option>
+                                    <option value="female">Женский</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Город *</label>
+                                <input type="text" class="form-input" name="city" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Воцерковленность *</label>
+                                <select class="form-input" name="churchStatus" required>
+                                    <option value="">Выберите</option>
+                                    <option value="воцерковленный">Воцерковленный</option>
+                                    <option value="неофит">Неофит</option>
+                                    <option value="прихожу к вере">Прихожу к вере</option>
+                                    <option value="ищущий">Ищущий</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Семейное положение *</label>
+                                <select class="form-input" name="maritalStatus" required>
+                                    <option value="">Выберите</option>
+                                    <option value="холост">Холост/Не замужем</option>
+                                    <option value="разведен">Разведён(а)</option>
+                                    <option value="вдовец">Вдовец/Вдова</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep()">
+                                <i class="fas fa-arrow-left"></i> Назад
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                Далее <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: About -->
+                    <div class="step-content" id="stepContent3">
+                        <h3>Шаг 3: О себе</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Образование</label>
+                            <select class="form-input" name="education">
+                                <option value="">Выберите</option>
+                                <option value="среднее">Среднее</option>
+                                <option value="среднее специальное">Среднее специальное</option>
+                                <option value="высшее">Высшее</option>
+                                <option value="ученая степень">Учёная степень</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Профессия</label>
+                            <input type="text" class="form-input" name="profession" placeholder="Ваша профессия">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">О себе *</label>
+                            <textarea class="form-input form-textarea" name="about" required placeholder="Расскажите о себе, своих интересах, целях..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Кого ищу *</label>
+                            <textarea class="form-input form-textarea" name="seeking" required placeholder="Опишите, какого человека вы хотели бы встретить..."></textarea>
+                        </div>
+                        
+                        <h4>Интересы</h4>
+                        <div class="interests-grid">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interests" value="паломничество">
+                                Паломничество
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interests" value="церковное пение">
+                                Церковное пение
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interests" value="богословие">
+                                Богословие
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interests" value="благотворительность">
+                                Благотворительность
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interests" value="чтение">
+                                Чтение
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interests" value="спорт">
+                                Спорт
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interests" value="путешествия">
+                                Путешествия
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="interests" value="природа">
+                                Природа
+                            </label>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                            <button type="button" class="btn btn-secondary" onclick="previousStep()">
+                                <i class="fas fa-arrow-left"></i> Назад
+                            </button>
+                            <button type="submit" class="btn btn-success btn-large">
+                                <i class="fas fa-check"></i> Создать анкету
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cabinet Section -->
+    <section id="cabinet" class="section">
+        <div class="container">
+            <h2 class="section-title">Личный кабинет</h2>
+            
+            <div class="cabinet-grid">
+                <div class="cabinet-card" onclick="showSection('myprofile')">
+                    <div class="cabinet-icon"><i class="fas fa-user"></i></div>
+                    <h3>Моя анкета</h3>
+                    <p>Редактировать профиль</p>
+                </div>
+                
+                <div class="cabinet-card" onclick="showSection('messages')">
+                    <div class="cabinet-icon"><i class="fas fa-envelope"></i></div>
+                    <h3>Сообщения <span class="badge" id="cabinetMessagesCount">0</span></h3>
+                    <p>Входящие и исходящие</p>
+                </div>
+                
+                <div class="cabinet-card" onclick="showSection('favorites')">
+                    <div class="cabinet-icon"><i class="fas fa-heart"></i></div>
+                    <h3>Избранное</h3>
+                    <p>Сохранённые анкеты</p>
+                </div>
+                
+                <div class="cabinet-card" onclick="showSection('visitors')">
+                    <div class="cabinet-icon"><i class="fas fa-eye"></i></div>
+                    <h3>Гости</h3>
+                    <p>Кто смотрел анкету</p>
+                </div>
+                
+                <div class="cabinet-card" onclick="showSection('settings')">
+                    <div class="cabinet-icon"><i class="fas fa-cog"></i></div>
+                    <h3>Настройки</h3>
+                    <p>Приватность и уведомления</p>
+                </div>
+                
+                <div class="cabinet-card" onclick="showSection('subscription')">
+                    <div class="cabinet-icon"><i class="fas fa-crown"></i></div>
+                    <h3>Подписка</h3>
+                    <p>Премиум возможности</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Messages Section -->
+    <section id="messages" class="section">
+        <div class="container">
+            <h2 class="section-title">Сообщения</h2>
+            
+            <div class="messages-container">
+                <div class="chats-list">
+                    <h3>Диалоги</h3>
+                    <div class="chat-item active" onclick="selectChat(1)">
+                        <strong>Мария</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Последнее сообщение...</p>
+                    </div>
+                    <div class="chat-item" onclick="selectChat(2)">
+                        <strong>Александр</strong>
+                        <p style="font-size: 0.9rem; color: #666;">Спасибо за ответ!</p>
+                    </div>
+                </div>
+                
+                <div class="chat-window">
+                    <div class="messages-area" id="messagesArea">
+                        <div class="message">
+                            <div class="message-content">
+                                Здравствуйте! Увидела вашу анкету...
+                            </div>
+                        </div>
+                        <div class="message sent">
+                            <div class="message-content">
+                                Здравствуйте! Рад знакомству!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="message-input">
+                        <input type="text" class="form-input" placeholder="Введите сообщение..." id="messageInput">
+                        <button class="btn btn-primary" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Favorites Section -->
+    <section id="favorites" class="section">
+        <div class="container">
+            <h2 class="section-title">Избранное</h2>
+            <div class="favorites-grid" id="favoritesGrid">
+                <p style="text-align: center; color: #666;">У вас пока нет избранных анкет</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visitors Section -->
+    <section id="visitors" class="section">
+        <div class="container">
+            <h2 class="section-title">Гости профиля</h2>
+            <div class="profiles-grid" id="visitorsGrid">
+                <p style="text-align: center; color: #666;">Пока никто не просматривал вашу анкету</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings" class="section">
+        <div class="container">
+            <h2 class="section-title">Настройки</h2>
+            
+            <div class="settings-container">
+                <div class="settings-section">
+                    <h3>Приватность</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked>
+                        Показывать мою анкету в поиске
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked>
+                        Разрешить отправку мне сообщений
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox">
+                        Скрыть мой онлайн статус
+                    </label>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Уведомления</h3>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked>
+                        Новые сообщения
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked>
+                        Кто-то добавил в избранное
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox">
+                        Новые анкеты по моим критериям
+                    </label>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Аккаунт</h3>
+                    <button class="btn btn-secondary">Изменить пароль</button>
+                    <button class="btn btn-secondary">Изменить email</button>
+                    <button class="btn btn-danger">Удалить аккаунт</button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="saveSettings()">
+                        <i class="fas fa-save"></i> Сохранить настройки
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subscription Section -->
+    <section id="subscription" class="section">
+        <div class="container">
+            <h2 class="section-title">Премиум подписка</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div class="cabinet-card" style="border: 2px solid #e91e63;">
+                    <h3>Базовый</h3>
+                    <p style="font-size: 2rem; color: #e91e63; margin: 1rem 0;">Бесплатно</p>
+                    <ul style="text-align: left; list-style: none; padding: 0;">
+                        <li>✓ Создание анкеты</li>
+                        <li>✓ Просмотр анкет</li>
+                        <li>✓ 5 сообщений в день</li>
+                        <li>✗ Расширенный поиск</li>
+                        <li>✗ Без рекламы</li>
+                    </ul>
+                </div>
+                
+                <div class="cabinet-card" style="border: 2px solid #4caf50; transform: scale(1.05);">
+                    <div style="background: #4caf50; color: white; padding: 0.5rem; margin: -2rem -2rem 1rem; border-radius: 8px 8px 0 0;">
+                        Популярный
+                    </div>
+                    <h3>Премиум</h3>
+                    <p style="font-size: 2rem; color: #4caf50; margin: 1rem 0;">990 ₽/мес</p>
+                    <ul style="text-align: left; list-style: none; padding: 0;">
+                        <li>✓ Все возможности базового</li>
+                        <li>✓ Неограниченные сообщения</li>
+                        <li>✓ Расширенный поиск</li>
+                        <li>✓ Без рекламы</li>
+                        <li>✓ Приоритет в выдаче</li>
+                    </ul>
+                    <button class="btn btn-success" style="margin-top: 1rem;">Выбрать</button>
+                </div>
+                
+                <div class="cabinet-card" style="border: 2px solid #ff9800;">
+                    <h3>VIP</h3>
+                    <p style="font-size: 2rem; color: #ff9800; margin: 1rem 0;">1990 ₽/мес</p>
+                    <ul style="text-align: left; list-style: none; padding: 0;">
+                        <li>✓ Все возможности премиум</li>
+                        <li>✓ Персональный менеджер</li>
+                        <li>✓ Проверка анкет</li>
+                        <li>✓ Организация встреч</li>
+                        <li>✓ VIP статус</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="margin-top: 1rem;">Выбрать</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- My Profile Section -->
+    <section id="myprofile" class="section">
+        <div class="container">
+            <h2 class="section-title">Моя анкета</h2>
+            
+            <div class="create-form">
+                <div id="profileDisplay" style="text-align: center; padding: 2rem;">
+                    <p>Загрузка профиля...</p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="editProfile()">
+                        <i class="fas fa-edit"></i> Редактировать
+                    </button>
+                    <button class="btn btn-secondary" onclick="showSection('cabinet')">
+                        <i class="fas fa-arrow-left"></i> Назад в кабинет
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">О платформе</h2>
+            
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                    "Спаси и Сохрани" — это православная платформа знакомств для верующих людей, 
+                    которые ищут спутника жизни для создания крепкой семьи, основанной на общих духовных ценностях.
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                    <div>
+                        <i class="fas fa-heart" style="font-size: 3rem; color: #e91e63; margin-bottom: 1rem;"></i>
+                        <h3>Серьезные отношения</h3>
+                        <p>Только для тех, кто ищет спутника жизни для создания семьи</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-cross" style="font-size: 3rem; color: #e91e63; margin-bottom: 1rem;"></i>
+                        <h3>Православные ценности</h3>
+                        <p>Объединяем людей с общими духовными ценностями</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-shield-alt" style="font-size: 3rem; color: #e91e63; margin-bottom: 1rem;"></i>
+                        <h3>Безопасность</h3>
+                        <p>Проверка анкет и защита личных данных</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 3rem;">
+                    <h3>Контакты</h3>
+                    <p>Email: info@spasi-sohrani.ru</p>
+                    <p>Телефон: +7 (495) 123-45-67</p>
+                    <p>Адрес: Москва, ул. Православная, д. 1</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Вход</h2>
+                <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required id="loginEmail">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-input" required id="loginPassword">
+                </div>
+                
+                <label class="checkbox-label">
+                    <input type="checkbox"> Запомнить меня
+                </label>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+                
+                <p style="text-align: center; margin-top: 1rem;">
+                    <a href="#" style="color: #e91e63;">Забыли пароль?</a>
+                </p>
+                
+                <hr style="margin: 1.5rem 0;">
+                
+                <p style="text-align: center;">
+                    Нет аккаунта? <a href="#" onclick="closeModal('loginModal'); showModal('registerModal')" style="color: #e91e63;">Зарегистрируйтесь</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Регистрация</h2>
+                <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            
+            <form onsubmit="register(event)">
+                <div class="form-group">
+                    <label class="form-label">Имя</label>
+                    <input type="text" class="form-input" required id="registerName">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required id="registerEmail">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-input" required id="registerPassword">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Подтвердите пароль</label>
+                    <input type="password" class="form-input" required id="registerPasswordConfirm">
+                </div>
+                
+                <label class="checkbox-label">
+                    <input type="checkbox" required> Я согласен с правилами платформы
+                </label>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-user-plus"></i> Зарегистрироваться
+                </button>
+                
+                <hr style="margin: 1.5rem 0;">
+                
+                <p style="text-align: center;">
+                    Есть аккаунт? <a href="#" onclick="closeModal('registerModal'); showModal('loginModal')" style="color: #e91e63;">Войдите</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Detail Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="profileModalName">Имя профиля</h2>
+                <button class="modal-close" onclick="closeModal('profileModal')">&times;</button>
+            </div>
+            
+            <div id="profileModalContent">
+                <!-- Profile details will be loaded here -->
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="sendMessageToProfile()">
+                    <i class="fas fa-envelope"></i> Написать
+                </button>
+                <button class="btn btn-secondary" onclick="addProfileToFavorites()">
+                    <i class="fas fa-heart"></i> В избранное
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let profiles = [];
+        let favorites = [];
+
+        // Initialize profiles data
+        function initializeProfiles() {
+            profiles = [
+                {
+                    id: 1,
+                    name: 'Мария',
+                    age: 28,
+                    city: 'Москва',
+                    avatar: 'М',
+                    gender: 'female',
+                    churchStatus: 'воцерковленная',
+                    maritalStatus: 'не замужем',
+                    online: true,
+                    quote: 'Ищу верующего человека для создания крепкой православной семьи...',
+                    about: 'Преподаю в воскресной школе, люблю паломничества по святым местам.',
+                    interests: ['паломничество', 'церковное пение', 'чтение'],
+                    education: 'высшее',
+                    profession: 'Преподаватель'
+                },
+                {
+                    id: 2,
+                    name: 'Александр',
+                    age: 32,
+                    city: 'Санкт-Петербург',
+                    avatar: 'А',
+                    gender: 'male',
+                    churchStatus: 'воцерковленный',
+                    maritalStatus: 'холост',
+                    online: true,
+                    quote: 'Воцерковленный христианин, ищу спутницу жизни для совместного пути к Богу...',
+                    about: 'Служу в алтаре, участвую в приходской жизни. Ищу верующую девушку для создания семьи.',
+                    interests: ['богословие', 'благотворительность', 'чтение'],
+                    education: 'высшее',
+                    profession: 'Инженер'
+                },
+                {
+                    id: 3,
+                    name: 'Елена',
+                    age: 26,
+                    city: 'Екатеринбург',
+                    avatar: 'Е',
+                    gender: 'female',
+                    churchStatus: 'неофит',
+                    maritalStatus: 'не замужем',
+                    online: false,
+                    quote: 'Недавно пришла к вере, ищу человека, который поможет расти духовно...',
+                    about: 'Два года назад крестилась, активно изучаю Православие. Ищу понимающего и терпеливого человека.',
+                    interests: ['богословие', 'природа', 'чтение'],
+                    education: 'среднее специальное',
+                    profession: 'Медсестра'
+                }
+            ];
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeProfiles();
+            loadProfiles();
+            
+            // Add click outside handler for user menu
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#userAvatar') && !e.target.closest('#userMenu')) {
+                    document.getElementById('userMenu').classList.remove('active');
+                }
+            });
+        });
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+                
+                // Update navigation
+                document.querySelectorAll('.nav a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + sectionId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // Toggle user menu
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('active');
+        }
+
+        // Load profiles
+        function loadProfiles() {
+            const grid = document.getElementById('profilesGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = profiles.map(profile => createProfileCard(profile)).join('');
+        }
+
+        // Create profile card HTML
+        function createProfileCard(profile) {
+            const interestTags = profile.interests.map(interest => 
+                `<span class="interest-tag">${interest}</span>`
+            ).join('');
+            
+            return `
+                <div class="profile-card" onclick="showProfile(${profile.id})">
+                    <div class="profile-header">
+                        <div class="profile-avatar">${profile.avatar}</div>
+                        <div>
+                            <div class="profile-name">
+                                ${profile.name}, <span class="profile-age">${profile.age} лет</span>
+                                ${profile.online ? '<span class="online-indicator"></span>' : ''}
+                            </div>
+                            <div class="profile-location"><i class="fas fa-map-marker-alt"></i> ${profile.city}</div>
+                        </div>
+                    </div>
+                    <div class="profile-quote">"${profile.quote}"</div>
+                    <div class="profile-interests">${interestTags}</div>
+                    <div class="profile-actions">
+                        <button class="btn btn-primary btn-small" onclick="handleMessage(event, ${profile.id})">
+                            <i class="fas fa-envelope"></i> Написать
+                        </button>
+                        <button class="btn btn-secondary btn-small" onclick="handleFavorite(event, ${profile.id})">
+                            <i class="fas fa-heart"></i> В избранное
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Handle message button
+        function handleMessage(event, profileId) {
+            event.stopPropagation();
+            if (!currentUser) {
+                showNotification('Для отправки сообщений необходимо войти', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            
+            showNotification('Открыт чат с пользователем');
+        }
+
+        // Handle favorite button
+        function handleFavorite(event, profileId) {
+            event.stopPropagation();
+            if (!currentUser) {
+                showNotification('Для добавления в избранное необходимо войти', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            
+            if (favorites.includes(profileId)) {
+                favorites = favorites.filter(id => id !== profileId);
+                showNotification('Удалено из избранного');
+            } else {
+                favorites.push(profileId);
+                showNotification('Добавлено в избранное');
+            }
+        }
+
+        // Login
+        function login(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (email && password) {
+                currentUser = {
+                    id: Date.now(),
+                    name: email.split('@')[0],
+                    email: email,
+                    avatar: email[0].toUpperCase()
+                };
+                
+                updateAuthUI();
+                closeModal('loginModal');
+                showNotification('Вход выполнен успешно!');
+            }
+        }
+
+        // Register
+        function register(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            
+            if (password !== passwordConfirm) {
+                showNotification('Пароли не совпадают', 'error');
+                return;
+            }
+            
+            if (name && email && password) {
+                currentUser = {
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    avatar: name[0].toUpperCase()
+                };
+                
+                updateAuthUI();
+                closeModal('registerModal');
+                showNotification('Регистрация успешна!');
+            }
+        }
+
+        // Update auth UI
+        function updateAuthUI() {
+            if (currentUser) {
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userInfo').style.display = 'flex';
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userAvatar').textContent = currentUser.avatar;
+            } else {
+                document.getElementById('authButtons').style.display = 'flex';
+                document.getElementById('userInfo').style.display = 'none';
+            }
+        }
+
+        // Logout
+        function logout() {
+            currentUser = null;
+            updateAuthUI();
+            showNotification('Вы вышли из системы');
+            showSection('home');
+            document.getElementById('userMenu').classList.remove('active');
+        }
+
+        // Handle create profile
+        function handleCreateProfile() {
+            if (!currentUser) {
+                showNotification('Для создания анкеты необходимо войти', 'warning');
+                showModal('loginModal');
+                return;
+            }
+            
+            showNotification('Функция создания анкеты в разработке');
+        }
+
+        // Load more profiles
+        function loadMoreProfiles() {
+            showNotification('Загружаем больше анкет...', 'info');
+            
+            setTimeout(() => {
+                showNotification('Загружены новые анкеты');
+            }, 1000);
+        }
+
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // ESC to close modals
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
