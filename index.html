@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Спаси и Сохрани — Православные знакомства</title>
+
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Critical CSS (above-the-fold) -->
+  <style>
+    :root {
+      --brand: #e91e63;
+      --text: #333;
+      --bg: #f5f5f5;
+      --card: #fff;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    .header {
+      background: var(--card);
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    .nav { display: flex; gap: 1rem; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+    .nav a { text-decoration: none; color: var(--text); font-weight: 500; padding: 0.5rem 0; }
+    .nav a.active { color: var(--brand); border-bottom: 2px solid var(--brand); }
+
+    .btn {
+      padding: 0.7rem 1.4rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary { background: var(--brand); color: #fff; }
+    .btn-secondary { background: #fff; color: var(--brand); border: 1px solid var(--brand); }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #fff2f7 100%);
+      padding: 3.5rem 0;
+    }
+    .hero h1 { margin: 0 0 0.75rem 0; font-size: 2.4rem; }
+    .hero p { margin: 0 0 1.5rem 0; color: #555; max-width: 720px; }
+
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .stat-number { font-size: 1.8rem; font-weight: 800; color: var(--brand); }
+
+    .section { padding: 3rem 0; display: none; min-height: 60vh; }
+    .section.active { display: block; }
+
+    .section-title { font-size: 1.8rem; margin: 0 0 1.5rem 0; }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 2000;
+    }
+
+    .notification.error { background: #f44336; }
+    .notification.warning { background: #ff9800; }
+    .notification.info { background: #2196f3; }
+
+    /* Minimal modal styling (rest comes from async CSS) */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1500;
+    }
+
+    .modal-content {
+      background: white;
+      width: min(560px, calc(100% - 24px));
+      margin: 8vh auto;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #eee;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+    }
+  </style>
+
+  <!-- Non-critical CSS (async) -->
+  <link rel="preload" href="/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="/css/styles.css" /></noscript>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a class="logo" href="#home" data-section="home" aria-label="На главную">✝️ Спаси и Сохрани</a>
+
+        <nav>
+          <ul class="nav" id="nav">
+            <li><a href="#home" data-section="home" class="active">Главная</a></li>
+            <li><a href="#profiles" data-section="profiles">Анкеты</a></li>
+            <li><a href="#search" data-section="search">Поиск</a></li>
+            <li><a href="#create" data-section="create">Создать анкету</a></li>
+            <li><a href="#about" data-section="about">О нас</a></li>
+          </ul>
+        </nav>
+
+        <div class="auth-buttons">
+          <div id="authButtons">
+            <button class="btn btn-secondary" onclick="App.showModal('loginModal')">Войти</button>
+            <button class="btn btn-primary" onclick="App.showModal('registerModal')">Регистрация</button>
+          </div>
+
+          <div id="userInfo" class="user-info">
+            <span id="userName">Имя</span>
+            <div class="user-avatar" id="userAvatar" onclick="App.toggleUserMenu()">И</div>
+          </div>
+
+          <div id="userMenu" class="user-menu">
+            <a href="#cabinet" data-section="cabinet">Мой кабинет</a>
+            <a href="#messages" data-section="messages">Сообщения</a>
+            <a href="#favorites" data-section="favorites">Избранное</a>
+            <hr />
+            <a href="javascript:void(0)" onclick="App.logout()">Выйти</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="section active">
+      <div class="hero">
+        <div class="container">
+          <h1>Найдите свою вторую половинку в вере</h1>
+          <p>Православная платформа знакомств для создания крепкой семьи, основанной на духовных ценностях и взаимном уважении.</p>
+
+          <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="App.handleCreateProfile()">Создать анкету</button>
+            <button class="btn btn-secondary" onclick="App.showSection('profiles')">Смотреть анкеты</button>
+            <a class="btn btn-secondary" href="/orthodox-dating-unified.html">Оригинальная версия</a>
+          </div>
+
+          <div class="stats" id="stats" aria-label="Статистика"></div>
+        </div>
+      </div>
+
+      <div id="quickActions" class="lazy-section" aria-label="Как это работает?"></div>
+    </section>
+
+    <div id="sectionsContainer">
+      <section id="cabinet" class="section">
+        <div class="container">
+          <h2 class="section-title">Личный кабинет</h2>
+          <p>Раздел-заглушка для демо. После входа сюда будет вести приложение.</p>
+        </div>
+      </section>
+
+      <section id="messages" class="section">
+        <div class="container">
+          <h2 class="section-title">Сообщения</h2>
+          <p>Раздел-заглушка для демо. Здесь будет чат.</p>
+        </div>
+      </section>
+
+      <section id="favorites" class="section">
+        <div class="container">
+          <h2 class="section-title">Избранное</h2>
+          <p>Раздел-заглушка для демо. Здесь будут избранные анкеты.</p>
+        </div>
+      </section>
+    </div>
+
+    <div id="modalsContainer">
+      <div id="loginModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Вход</h2>
+            <button class="modal-close" onclick="App.closeModal('loginModal')" aria-label="Закрыть">&times;</button>
+          </div>
+          <form onsubmit="App.login(event)">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input id="loginEmail" class="form-input" type="email" required placeholder="example@mail.ru" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Пароль</label>
+              <input id="loginPassword" class="form-input" type="password" required placeholder="Введите пароль" />
+            </div>
+            <button class="btn btn-primary" type="submit">Войти</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="registerModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Регистрация</h2>
+            <button class="modal-close" onclick="App.closeModal('registerModal')" aria-label="Закрыть">&times;</button>
+          </div>
+          <form onsubmit="App.register(event)">
+            <div class="form-group">
+              <label class="form-label">Имя</label>
+              <input id="registerName" class="form-input" type="text" required placeholder="Ваше имя" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input id="registerEmail" class="form-input" type="email" required placeholder="example@mail.ru" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Пароль</label>
+              <input id="registerPassword" class="form-input" type="password" required placeholder="Минимум 6 символов" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Повторите пароль</label>
+              <input id="registerPasswordConfirm" class="form-input" type="password" required placeholder="Повторите пароль" />
+            </div>
+            <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="notification" class="notification" role="status" aria-live="polite"></div>
+  </main>
+
+  <script src="/js/app.js" defer></script>
+  <script src="/js/performance-monitor.js" defer></script>
+
+  <script>
+    // Navigation: route links -> App.showSection
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-section]');
+      if (!link) return;
+
+      const sectionId = link.getAttribute('data-section');
+      if (!sectionId) return;
+
+      e.preventDefault();
+      if (window.App && typeof window.App.showSection === 'function') {
+        window.App.showSection(sectionId);
+      }
+    });
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {
+          // ignore (local runs / some servers)
+        });
+      });
+    }
+  </script>
+</body>
+</html>
