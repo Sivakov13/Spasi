@@ -443,6 +443,15 @@ const App = {
             case 'create':
                 sectionHTML = await this.createCreateSection();
                 break;
+            case 'cabinet':
+                sectionHTML = await this.createCabinetSection();
+                break;
+            case 'messages':
+                sectionHTML = await this.createMessagesSection();
+                break;
+            case 'favorites':
+                sectionHTML = await this.createFavoritesSection();
+                break;
             case 'about':
                 sectionHTML = await this.createAboutSection();
                 break;
@@ -578,8 +587,37 @@ const App = {
                     });
                 }
                 break;
+            case 'favorites':
+                this.renderFavorites();
+                break;
             // Add other section-specific loading logic here
         }
+    },
+
+    // Re-render profiles grid if it exists
+    renderProfiles() {
+        const profilesGrid = document.getElementById('profilesGrid');
+        if (!profilesGrid) return;
+        profilesGrid.innerHTML = this.state.profiles.map(profile => this.createProfileCard(profile)).join('');
+    },
+
+    // Render favorites section content
+    renderFavorites() {
+        const favoritesGrid = document.getElementById('favoritesGrid');
+        if (!favoritesGrid) return;
+
+        const favoriteProfiles = this.state.profiles.filter(p => this.state.favorites.includes(p.id));
+        if (favoriteProfiles.length === 0) {
+            favoritesGrid.innerHTML = `
+                <div style="text-align:center; padding: 2rem; color: #666;">
+                    <p style="margin: 0 0 1rem;">У вас пока нет избранных анкет.</p>
+                    <button class="btn btn-primary" onclick="App.showSection('profiles')">Перейти к анкетам</button>
+                </div>
+            `;
+            return;
+        }
+
+        favoritesGrid.innerHTML = favoriteProfiles.map(profile => this.createProfileCard(profile)).join('');
     },
 
     // Show profile modal
@@ -706,7 +744,7 @@ const App = {
         }
         
         this.showSection('messages');
-        this.showNotification('Открыт чат с пользователем');
+        this.showNotification('Открыт чат', 'info');
     },
 
     // Handle favorite button
@@ -725,6 +763,9 @@ const App = {
             this.state.favorites.push(profileId);
             this.showNotification('Добавлено в избранное');
         }
+
+        // If favorites section is present, keep it in sync
+        this.renderFavorites();
     },
 
     // Handle create profile
@@ -744,6 +785,38 @@ const App = {
         if (userMenu) {
             userMenu.classList.toggle('active');
         }
+    },
+
+    // Send message from the messages section
+    sendMessage() {
+        const input = document.getElementById('messageInput');
+        const messagesContainer = document.getElementById('chatMessages');
+        if (!input || !messagesContainer) return;
+
+        const text = (input.value || '').trim();
+        if (!text) return;
+
+        const msg = document.createElement('div');
+        msg.className = 'message sent';
+        msg.innerHTML = `<div class="message-content">${escapeHtml(text)}</div>`;
+        messagesContainer.appendChild(msg);
+        input.value = '';
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Simulate a response
+        setTimeout(() => {
+            const responseTexts = [
+                'Спасибо за сообщение! Очень приятно познакомиться.',
+                'Расскажите, пожалуйста, немного о себе.',
+                'Как давно вы воцерковлены?'
+            ];
+            const response = responseTexts[Math.floor(Math.random() * responseTexts.length)];
+            const resp = document.createElement('div');
+            resp.className = 'message received';
+            resp.innerHTML = `<div class="message-content">${escapeHtml(response)}</div>`;
+            messagesContainer.appendChild(resp);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 900);
     },
 
     // Perform search with debouncing
@@ -892,6 +965,7 @@ const App = {
     // Logout functionality
     logout() {
         this.state.currentUser = null;
+        this.state.favorites = [];
         this.updateAuthUI();
         this.showNotification('Вы вышли из системы');
         this.showSection('home');
@@ -983,8 +1057,72 @@ const App = {
                 </div>
             </div>
         `;
+    },
+
+    // Create cabinet section
+    async createCabinetSection() {
+        const userName = this.state.currentUser?.name || 'Пользователь';
+        return `
+            <div class="container">
+                <h2 class="section-title">Кабинет</h2>
+                <div class="create-form">
+                    <p style="margin-top: 0; color: #666; text-align: center;">
+                        Добро пожаловать, <strong>${escapeHtml(userName)}</strong>.
+                    </p>
+                    <div style="display:flex; gap: 1rem; justify-content:center; flex-wrap:wrap; margin-top: 1.5rem;">
+                        <button class="btn btn-primary" onclick="App.showSection('profiles')">Смотреть анкеты</button>
+                        <button class="btn btn-secondary" onclick="App.showSection('favorites')">Избранное</button>
+                        <button class="btn btn-secondary" onclick="App.showSection('messages')">Сообщения</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // Create messages section
+    async createMessagesSection() {
+        return `
+            <div class="container">
+                <h2 class="section-title">Сообщения</h2>
+                <div class="messages-container">
+                    <div class="chats-list">
+                        <div class="chat-item active">Мария</div>
+                        <div class="chat-item">Александр</div>
+                    </div>
+                    <div class="chat-window">
+                        <div class="messages-area" id="chatMessages">
+                            <div class="message received"><div class="message-content">Здравствуйте! Рада знакомству.</div></div>
+                        </div>
+                        <div class="message-input">
+                            <input id="messageInput" class="form-input" type="text" placeholder="Введите сообщение..." autocomplete="off" />
+                            <button class="btn btn-primary btn-small" onclick="App.sendMessage()">Отправить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // Create favorites section
+    async createFavoritesSection() {
+        return `
+            <div class="container">
+                <h2 class="section-title">Избранное</h2>
+                <div class="favorites-grid" id="favoritesGrid"></div>
+            </div>
+        `;
     }
 };
+
+// Small helper to avoid injecting raw HTML from user input
+function escapeHtml(unsafe) {
+    return String(unsafe)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
 
 // Initialize app when DOM is loaded
 if (document.readyState === 'loading') {
