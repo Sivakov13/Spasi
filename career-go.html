@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career GO — Умный поиск работы с ИИ-ассистентом</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #0ea5e9;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .logo span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--dark);
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: var(--light);
+            border-color: var(--primary);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-large {
+            padding: 16px 32px;
+            font-size: 1.05rem;
+            border-radius: 14px;
+        }
+
+        .btn-icon {
+            width: 48px;
+            height: 48px;
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.03) 0%, rgba(14, 165, 233, 0.03) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--dark);
+        }
+
+        .hero-text h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .hero-mockup {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+        }
+
+        .mockup-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .mockup-dot.red { background: #ef4444; }
+        .mockup-dot.yellow { background: #eab308; }
+        .mockup-dot.green { background: #22c55e; }
+
+        .mockup-content {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .ai-chat-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar.ai {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .chat-avatar.user {
+            background: #e2e8f0;
+            color: var(--gray);
+        }
+
+        .chat-bubble {
+            background: var(--white);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow);
+            max-width: 280px;
+        }
+
+        .chat-bubble.ai {
+            border-left: 3px solid var(--primary);
+        }
+
+        .chat-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .chat-tag {
+            background: var(--white);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .chat-tag:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: var(--white);
+            padding: 16px 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-card.card-1 {
+            top: -20px;
+            right: -40px;
+            animation-delay: 0s;
+        }
+
+        .floating-card.card-2 {
+            bottom: 40px;
+            left: -60px;
+            animation-delay: 1s;
+        }
+
+        .floating-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .floating-icon.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+        }
+
+        .floating-icon.blue {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--secondary);
+        }
+
+        .floating-text {
+            font-size: 0.85rem;
+        }
+
+        .floating-text strong {
+            display: block;
+            color: var(--dark);
+        }
+
+        .floating-text span {
+            color: var(--gray);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--light);
+            padding: 32px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .feature-card:hover {
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(99, 102, 241, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon.purple {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .feature-icon.blue {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--secondary);
+        }
+
+        .feature-icon.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+        }
+
+        .feature-icon.orange {
+            background: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+        }
+
+        .feature-icon.pink {
+            background: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+        }
+
+        .feature-icon.cyan {
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: var(--dark);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .how-it-works .section-badge {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary-light);
+        }
+
+        .how-it-works .section-title {
+            color: var(--white);
+        }
+
+        .how-it-works .section-subtitle {
+            color: var(--gray-light);
+        }
+
+        .steps-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 32px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .step-card p {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* For Who Section */
+        .for-who {
+            background: var(--light);
+        }
+
+        .audience-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .audience-tab {
+            padding: 14px 32px;
+            background: var(--white);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .audience-tab.active {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .audience-tab:hover:not(.active) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .audience-content {
+            display: none;
+        }
+
+        .audience-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .audience-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .audience-features {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .audience-feature {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .audience-feature:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateX(8px);
+        }
+
+        .audience-feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .audience-feature h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .audience-feature p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .audience-visual {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .visual-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .visual-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .visual-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .job-card-demo {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .job-card-demo h4 {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .job-card-demo .company {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .job-tag {
+            background: var(--white);
+            color: var(--gray);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        .job-salary {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* AI Section */
+        .ai-section {
+            background: linear-gradient(180deg, var(--white) 0%, var(--light) 100%);
+        }
+
+        .ai-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .ai-features {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .ai-feature {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .ai-feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .ai-feature h4 {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .ai-feature p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .ai-demo {
+            background: var(--dark);
+            border-radius: 24px;
+            padding: 32px;
+            color: var(--white);
+        }
+
+        .ai-demo-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .ai-demo-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .ai-demo-title strong {
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .ai-demo-title span {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+        }
+
+        .ai-conversation {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ai-msg {
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            max-width: 85%;
+        }
+
+        .ai-msg.bot {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+        }
+
+        .ai-msg.user {
+            background: var(--primary);
+            align-self: flex-end;
+        }
+
+        .ai-input {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ai-input input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 14px 18px;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .ai-input input::placeholder {
+            color: var(--gray-light);
+        }
+
+        .ai-input button {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .ai-input button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Pricing Preview */
+        .pricing-preview {
+            background: var(--white);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .pricing-card {
+            background: var(--light);
+            border-radius: 24px;
+            padding: 36px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            background: var(--white);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'Популярный';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-card:hover:not(.featured) {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .pricing-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 0 auto 20px;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .pricing-card .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 16px 0;
+        }
+
+        .pricing-card .price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 24px 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pricing-features li i {
+            color: var(--accent);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient);
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-buttons .btn-primary {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .cta-buttons .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-buttons .btn-outline {
+            border-color: white;
+            color: white;
+        }
+
+        .cta-buttons .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: var(--gray-light);
+            padding: 80px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand .logo {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand .logo-icon {
+            background: var(--gradient);
+        }
+
+        .footer-brand p {
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-social a {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-column h4 {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--gray-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-legal a {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-legal a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .floating-card.card-1 {
+                right: 0;
+            }
+
+            .floating-card.card-2 {
+                left: 0;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .audience-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-buttons {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 120px 0 60px;
+            }
+
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-text p {
+                font-size: 1.1rem;
+            }
+
+            .hero-stats {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .audience-tabs {
+                flex-direction: column;
+            }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 999;
+            padding: 100px 24px 40px;
+            flex-direction: column;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 16px 0;
+            font-size: 1.2rem;
+            color: var(--dark);
+            text-decoration: none;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .mobile-menu .btn {
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    Career <span>GO</span>
+                </a>
+
+                <nav class="nav">
+                    <ul class="nav-links">
+                        <li><a href="#features">Возможности</a></li>
+                        <li><a href="#how-it-works">Как работает</a></li>
+                        <li><a href="#for-who">Для кого</a></li>
+                        <li><a href="#ai">ИИ-ассистент</a></li>
+                        <li><a href="#pricing">Тарифы</a></li>
+                    </ul>
+                    
+                    <div class="nav-buttons">
+                        <button class="btn btn-secondary">Войти</button>
+                        <button class="btn btn-primary">Начать бесплатно</button>
+                    </div>
+                </nav>
+
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMobileMenu()">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="#features" onclick="toggleMobileMenu()">Возможности</a>
+        <a href="#how-it-works" onclick="toggleMobileMenu()">Как работает</a>
+        <a href="#for-who" onclick="toggleMobileMenu()">Для кого</a>
+        <a href="#ai" onclick="toggleMobileMenu()">ИИ-ассистент</a>
+        <a href="#pricing" onclick="toggleMobileMenu()">Тарифы</a>
+        <button class="btn btn-secondary" style="width: 100%;">Войти</button>
+        <button class="btn btn-primary" style="width: 100%;">Начать бесплатно</button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Найдите работу мечты с <span>ИИ-ассистентом</span></h1>
+                    <p>Career GO — умная платформа для поиска работы и подбора персонала. Наш ИИ-консультант поможет найти идеальную вакансию, создать резюме и подготовиться к собеседованию.</p>
+                    
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-large">
+                            <i class="fas fa-play"></i> Начать поиск
+                        </button>
+                        <button class="btn btn-secondary btn-large">
+                            <i class="fas fa-building"></i> Для работодателей
+                        </button>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">50K+</span>
+                            <span class="stat-label">Активных вакансий</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">200K+</span>
+                            <span class="stat-label">Соискателей</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">Довольных клиентов</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="hero-mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot red"></div>
+                            <div class="mockup-dot yellow"></div>
+                            <div class="mockup-dot green"></div>
+                        </div>
+                        <div class="mockup-content">
+                            <div class="ai-chat-demo">
+                                <div class="chat-message">
+                                    <div class="chat-avatar ai">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <div class="chat-bubble ai">
+                                        Привет! Я ваш карьерный ИИ-консультант. Чем могу помочь сегодня?
+                                    </div>
+                                </div>
+                                <div class="chat-message">
+                                    <div class="chat-avatar user">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="chat-bubble">
+                                        Хочу найти удалённую работу в IT
+                                    </div>
+                                </div>
+                                <div class="chat-tags">
+                                    <span class="chat-tag"><i class="fas fa-search"></i> Найти работу</span>
+                                    <span class="chat-tag"><i class="fas fa-file-alt"></i> Создать резюме</span>
+                                    <span class="chat-tag"><i class="fas fa-users"></i> Найти сотрудника</span>
+                                    <span class="chat-tag"><i class="fas fa-plus"></i> Создать вакансию</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="floating-card card-1">
+                        <div class="floating-icon green">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="floating-text">
+                            <strong>Вакансия найдена!</strong>
+                            <span>Frontend Developer</span>
+                        </div>
+                    </div>
+
+                    <div class="floating-card card-2">
+                        <div class="floating-icon blue">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="floating-text">
+                            <strong>Новый отклик</strong>
+                            <span>5 минут назад</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-star"></i> Возможности
+                </div>
+                <h2 class="section-title">Всё для успешной карьеры</h2>
+                <p class="section-subtitle">Мощные инструменты для соискателей и работодателей, которые делают поиск работы и найм персонала эффективнее</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon purple">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>ИИ-консультант</h3>
+                    <p>Умный ассистент поможет найти вакансию, создать резюме и ответит на любые вопросы о карьере</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon blue">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Умный поиск</h3>
+                    <p>Продвинутые фильтры по зарплате, локации, формату работы и уровню опыта</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon green">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Создание резюме</h3>
+                    <p>Импорт PDF или создание с нуля с подсказками ИИ для повышения рейтинга</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon orange">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Тестовые задания</h3>
+                    <p>Автоматическая отправка тестов соискателям с ИИ-оценкой результатов</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon pink">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Проверка работодателей</h3>
+                    <p>Рейтинг компаний, статус «Проверенный работодатель» и отчёты о надёжности</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon cyan">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Встроенный чат</h3>
+                    <p>Общение между соискателями и работодателями прямо на платформе</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works section" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-cogs"></i> Как это работает
+                </div>
+                <h2 class="section-title">Простой путь к успеху</h2>
+                <p class="section-subtitle">Четыре шага к вашей идеальной работе или идеальному кандидату</p>
+            </div>
+
+            <div class="steps-container">
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Расскажите о себе</h3>
+                        <p>Опишите ваш запрос ИИ-ассистенту или сразу перейдите к каталогу вакансий</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Получите рекомендации</h3>
+                        <p>ИИ уточнит детали и предложит релевантные вакансии или кандидатов</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Создайте профиль</h3>
+                        <p>Загрузите резюме или вакансию с помощью ИИ-помощника</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>Найдите совпадение</h3>
+                        <p>Откликайтесь, общайтесь в чате и находите идеальных партнёров</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Who Section -->
+    <section class="for-who section" id="for-who">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-users"></i> Для кого
+                </div>
+                <h2 class="section-title">Решения для каждого</h2>
+                <p class="section-subtitle">Career GO подходит как соискателям, так и работодателям любого масштаба</p>
+            </div>
+
+            <div class="audience-tabs">
+                <button class="audience-tab active" onclick="switchAudience('seeker')">
+                    <i class="fas fa-user"></i> Для соискателей
+                </button>
+                <button class="audience-tab" onclick="switchAudience('employer')">
+                    <i class="fas fa-building"></i> Для работодателей
+                </button>
+            </div>
+
+            <!-- Seeker Content -->
+            <div class="audience-content active" id="seeker-content">
+                <div class="audience-grid">
+                    <div class="audience-features">
+                        <div class="audience-feature">
+                            <div class="audience-feature-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary);">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <div>
+                                <h4>Создание резюме с ИИ</h4>
+                                <p>Загрузите PDF или создайте с нуля. ИИ поможет улучшить и оценит рейтинг</p>
+                            </div>
+                        </div>
+
+                        <div class="audience-feature">
+                            <div class="audience-feature-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent);">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <h4>Зарплатный прогноз</h4>
+                                <p>Узнайте, сколько стоят ваши навыки на рынке труда</p>
+                            </div>
+                        </div>
+
+                        <div class="audience-feature">
+                            <div class="audience-feature-icon" style="background: rgba(14, 165, 233, 0.1); color: var(--secondary);">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <h4>Проверка работодателя</h4>
+                                <p>Закажите отчёт о надёжности компании перед откликом</p>
+                            </div>
+                        </div>
+
+                        <div class="audience-feature">
+                            <div class="audience-feature-icon" style="background: rgba(249, 115, 22, 0.1); color: #f97316;">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div>
+                                <h4>Отслеживание статуса</h4>
+                                <p>Шкала прогресса от отклика до одобрения с уведомлениями</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="audience-visual">
+                        <div class="visual-header">
+                            <span class="visual-title">Рекомендуемые вакансии</span>
+                            <span class="visual-badge"><i class="fas fa-fire"></i> Горячие</span>
+                        </div>
+                        
+                        <div class="job-card-demo">
+                            <h4>Frontend Developer</h4>
+                            <div class="company"><i class="fas fa-building"></i> Яндекс</div>
+                            <div class="job-tags">
+                                <span class="job-tag"><i class="fas fa-map-marker-alt"></i> Удалённо</span>
+                                <span class="job-tag"><i class="fas fa-clock"></i> Полный день</span>
+                                <span class="job-tag job-salary">200-350K ₽</span>
+                            </div>
+                        </div>
+
+                        <div class="job-card-demo">
+                            <h4>Product Manager</h4>
+                            <div class="company"><i class="fas fa-building"></i> VK</div>
+                            <div class="job-tags">
+                                <span class="job-tag"><i class="fas fa-map-marker-alt"></i> Москва</span>
+                                <span class="job-tag"><i class="fas fa-clock"></i> Гибрид</span>
+                                <span class="job-tag job-salary">250-400K ₽</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employer Content -->
+            <div class="audience-content" id="employer-content">
+                <div class="audience-grid">
+                    <div class="audience-features">
+                        <div class="audience-feature">
+                            <div class="audience-feature-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary);">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <div>
+                                <h4>Создание вакансий</h4>
+                                <p>Импорт PDF или создание с ИИ-рекомендациями для привлечения кандидатов</p>
+                            </div>
+                        </div>
+
+                        <div class="audience-feature">
+                            <div class="audience-feature-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent);">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div>
+                                <h4>Тестовые задания</h4>
+                                <p>Автоматическая отправка тестов с ИИ-оценкой и рейтингом кандидатов</p>
+                            </div>
+                        </div>
+
+                        <div class="audience-feature">
+                            <div class="audience-feature-icon" style="background: rgba(14, 165, 233, 0.1); color: var(--secondary);">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div>
+                                <h4>Рейтинг кандидатов</h4>
+                                <p>ТОП-3, ТОП-5, ТОП-10 лучших соискателей по результатам тестов</p>
+                            </div>
+                        </div>
+
+                        <div class="audience-feature">
+                            <div class="audience-feature-icon" style="background: rgba(249, 115, 22, 0.1); color: #f97316;">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                            <div>
+                                <h4>Статус «Проверенный»</h4>
+                                <p>Пройдите модерацию и получите бейдж доверия для кандидатов</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="audience-visual">
+                        <div class="visual-header">
+                            <span class="visual-title">Отклики на вакансию</span>
+                            <span class="visual-badge"><i class="fas fa-users"></i> 24 новых</span>
+                        </div>
+                        
+                        <div class="job-card-demo">
+                            <h4>Иван Петров</h4>
+                            <div class="company"><i class="fas fa-briefcase"></i> Frontend Developer • 5 лет опыта</div>
+                            <div class="job-tags">
+                                <span class="job-tag"><i class="fas fa-star"></i> Рейтинг: 92%</span>
+                                <span class="job-tag job-salary"><i class="fas fa-check"></i> Тест пройден</span>
+                            </div>
+                        </div>
+
+                        <div class="job-card-demo">
+                            <h4>Мария Сидорова</h4>
+                            <div class="company"><i class="fas fa-briefcase"></i> Senior Developer • 7 лет опыта</div>
+                            <div class="job-tags">
+                                <span class="job-tag"><i class="fas fa-star"></i> Рейтинг: 88%</span>
+                                <span class="job-tag"><i class="fas fa-clock"></i> Ожидает теста</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Section -->
+    <section class="ai-section section" id="ai">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-robot"></i> Искусственный интеллект
+                </div>
+                <h2 class="section-title">ИИ карьерный консультант</h2>
+                <p class="section-subtitle">Ваш персональный помощник доступен 24/7 для решения любых карьерных вопросов</p>
+            </div>
+
+            <div class="ai-content">
+                <div class="ai-features">
+                    <div class="ai-feature">
+                        <div class="ai-feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div>
+                            <h4>Диалог на естественном языке</h4>
+                            <p>Просто опишите что ищете — ИИ поймёт и предложит решение. Поддержка голосового ввода</p>
+                        </div>
+                    </div>
+
+                    <div class="ai-feature">
+                        <div class="ai-feature-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <h4>Умные рекомендации</h4>
+                            <p>ИИ анализирует ваш профиль и предлагает релевантные вакансии, улучшения резюме и советы</p>
+                        </div>
+                    </div>
+
+                    <div class="ai-feature">
+                        <div class="ai-feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div>
+                            <h4>Аналитика и прогнозы</h4>
+                            <p>Рейтинг резюме, зарплатные прогнозы, сравнение с конкурентами на рынке</p>
+                        </div>
+                    </div>
+
+                    <div class="ai-feature">
+                        <div class="ai-feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div>
+                            <h4>Техническая поддержка</h4>
+                            <p>ИИ ответит на вопросы о сервисе и поможет разобраться в функциях платформы</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-demo">
+                    <div class="ai-demo-header">
+                        <div class="ai-demo-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="ai-demo-title">
+                            <strong>Career GO AI</strong>
+                            <span>Карьерный консультант</span>
+                        </div>
+                    </div>
+
+                    <div class="ai-conversation">
+                        <div class="ai-msg bot">
+                            Здравствуйте! Я помогу вам найти работу мечты. Расскажите, что вы ищете?
+                        </div>
+                        <div class="ai-msg user">
+                            Ищу удалённую работу frontend разработчиком
+                        </div>
+                        <div class="ai-msg bot">
+                            Отлично! Какой у вас опыт работы и какие технологии знаете? React, Vue, Angular?
+                        </div>
+                        <div class="ai-msg user">
+                            3 года на React, знаю TypeScript
+                        </div>
+                        <div class="ai-msg bot">
+                            Нашёл 47 подходящих вакансий! Показать топ-10 с зарплатой от 200K? 🚀
+                        </div>
+                    </div>
+
+                    <div class="ai-input">
+                        <input type="text" placeholder="Введите ваш запрос...">
+                        <button><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Preview -->
+    <section class="pricing-preview section" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">
+                    <i class="fas fa-tag"></i> Тарифы
+                </div>
+                <h2 class="section-title">Прозрачные цены</h2>
+                <p class="section-subtitle">Начните бесплатно, переходите на PRO когда будете готовы</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <h3>Бесплатно</h3>
+                    <div class="price">0₽ <span>/ навсегда</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Просмотр вакансий и резюме</li>
+                        <li><i class="fas fa-check"></i> 1 резюме / 1 вакансия</li>
+                        <li><i class="fas fa-check"></i> Базовый ИИ-ассистент</li>
+                        <li><i class="fas fa-check"></i> 1 бесплатная проверка</li>
+                    </ul>
+                    <button class="btn btn-outline" style="width: 100%;">Начать</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>PRO</h3>
+                    <div class="price">990₽ <span>/ месяц</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Всё из бесплатного</li>
+                        <li><i class="fas fa-check"></i> Безлимитные резюме / вакансии</li>
+                        <li><i class="fas fa-check"></i> Полный ИИ-функционал</li>
+                        <li><i class="fas fa-check"></i> Приоритетная поддержка</li>
+                        <li><i class="fas fa-check"></i> Безлимитные проверки</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width: 100%;">Подключить PRO</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>Бизнес</h3>
+                    <div class="price">4990₽ <span>/ месяц</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Всё из PRO</li>
+                        <li><i class="fas fa-check"></i> До 10 пользователей</li>
+                        <li><i class="fas fa-check"></i> API доступ</li>
+                        <li><i class="fas fa-check"></i> Персональный менеджер</li>
+                        <li><i class="fas fa-check"></i> Брендирование</li>
+                    </ul>
+                    <button class="btn btn-outline" style="width: 100%;">Связаться</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Готовы найти работу мечты?</h2>
+                <p>Присоединяйтесь к тысячам соискателей и работодателей, которые уже используют Career GO</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary btn-large">
+                        <i class="fas fa-rocket"></i> Начать бесплатно
+                    </button>
+                    <button class="btn btn-outline btn-large">
+                        <i class="fas fa-play"></i> Смотреть демо
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        Career <span>GO</span>
+                    </a>
+                    <p>Умная платформа для поиска работы и подбора персонала с ИИ-ассистентом. Находите идеальные совпадения быстрее.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Продукт</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Возможности</a></li>
+                        <li><a href="#">Тарифы</a></li>
+                        <li><a href="#">ИИ-ассистент</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Компания</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Блог</a></li>
+                        <li><a href="#">Карьера</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Поддержка</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Справочный центр</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Обратная связь</a></li>
+                        <li><a href="#">Статус системы</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2024 Career GO. Все права защищены.</p>
+                <div class="footer-legal">
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Условия использования</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Audience tabs
+        function switchAudience(type) {
+            // Update tabs
+            document.querySelectorAll('.audience-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.audience-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(type + '-content').classList.add('active');
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .step-card, .pricing-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+
+        // Chat tags interaction
+        document.querySelectorAll('.chat-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.style.background = 'var(--primary)';
+                this.style.color = 'white';
+                setTimeout(() => {
+                    this.style.background = '';
+                    this.style.color = '';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
